@@ -1,0 +1,467 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+a{
+    text-decoration: none;
+    color: #333333;
+}
+/*header*/
+.elCol{
+    z-index: 1;
+    height: 10%;
+    background-color: white;
+    padding: 10px;
+    float: left;
+    position: absolute;
+}
+/*网站logo*/
+.homepage_logo{
+    position: relative;
+    left: 3%;
+}
+/*首页*/
+.homepage{
+    color: black;
+    position: relative;
+    bottom: 8px;
+    left: 9%;
+}
+/*全部游戏*/
+.all_game{
+    color: #333333;
+    position: relative;
+    bottom: 8px;
+    left: 10%;
+    height: 20px;
+}
+/*全部游戏:隐藏类型*/
+.all_game_type{
+    z-index: 1;
+    list-style:none;
+    float: left;
+    position: relative;
+    left: 5%;
+    background-color: #F2F8FE;
+    border-radius: 4px;
+    color: black;
+}
+li{
+    margin: 15px;
+    position: relative;
+    right: 3px;
+}
+li a{
+    text-decoration: none;
+    color: black;
+}
+li a:hover{
+    position: relative;
+    left: 5px;
+}
+/*游戏更新列表*/
+.update_list{
+    color: #333333;
+    position: relative;
+    bottom: 8px;
+    left: 11%;
+    height: 20px;
+}
+.update_list_a{
+    text-decoration: none;
+}
+/*资讯*/
+.notice{
+    color: black;
+    position: relative;
+    bottom: 8px;
+    left: 13%;
+}
+/*游戏攻略及其它*/
+.strategy{
+    color: #333333;
+    position: relative;
+    bottom: 8px;
+    left: 14%;
+    height: 20px;
+}
+/*游戏攻略及其它的隐藏列表*/
+.strategy_list{
+    z-index: 1;
+    list-style:none;
+    float: left;
+    position: relative;
+    left: 20%;
+    width: 100px;
+    background-color: #F2F8FE;
+    border-radius: 4px;
+    color: black;
+}
+.strategy_a{
+    text-decoration: none;
+}
+/*退出*/
+.quit{
+    display: inline-block;
+    position: absolute;
+    right: 50px;
+    line-height: 40px;
+}
+
+/*主体*/
+.main{
+    width: 100%;
+    height: 90%;
+    position: absolute;
+    top: 10%;
+    background-color: whitesmoke;
+    z-index: -1;
+}
+/*个人信息区*/
+.left_el_row{
+    width: 80%;
+    height: 90%;
+    background-color: white;
+    position: relative;
+    top: 5%;
+    left: 15%;
+    border-radius: 10px;
+}
+.left_title_main{
+    font-size: 25px;
+    text-align: center;
+    padding-top: 10px;
+}
+.left_head_main{
+    text-align: center;
+}
+.left_name_input_main{
+    width: 50%;
+    margin-right: 10px;
+}
+.left_account_main{
+    padding-top: 20px;
+}
+.left_money_main,.left_time_main,.left_type_main,.left_identity_main{
+    padding-top: 8px;
+}
+.left_password_main{
+    width: 96%;
+    position: relative;
+    left: 2%;
+}
+
+/*功能区*/
+.right_el_row{
+    width: 93%;
+    height: 90%;
+    background-color: white;
+    position: relative;
+    top: 5%;
+    left: 2%;
+    border-radius: 10px;
+}
+.right_el_tabs{
+    width: 100%;
+    height: 100%;
+}
+/*第一：游戏仓库*/
+.right_game_goods_main{
+    height: 230px;
+    margin-left: 2.8%;
+    margin-bottom: 2%;
+}
+.el-card__body {
+    padding: 0;
+}
+.right_game_img_main{
+    width: 100%;
+    height: 150px;
+}
+.right_game_img_media{
+    width: 100%;
+    height: 100%;
+}
+.right_game_desc_main{
+    width: 100%;
+    height: 80px;
+}
+.right_game_desc_type_main{
+    font-size: 15px;
+    opacity: 0.7;
+}
+.right_game_desc_name_main{
+    font-weight: bold;
+    word-break: break-all;
+
+    overflow :   hidden ;
+    text-overflow :   ellipsis ;
+    display :   -webkit-box ;
+    -webkit-line-clamp :   1 ;
+    -webkit-box-orient :   vertical ;
+}
+.right_game_desc_money_main,.right_game_desc_time_main{
+    font-size: 14px;
+}
+
+/*第二：点赞收藏*/
+.right_likes_goods_main{
+    height: 110px;
+    margin-left: 3%;
+    margin-bottom: 2%;
+}
+.right_likes_img_main{
+    width: 40%;
+    height: 110px;
+    float: left;
+}
+.right_likes_img_media{
+    width: 100%;
+    height: 100%;
+}
+.right_likes_desc_main{
+    width: 58%;
+    height: 110px;
+    float: right;
+}
+.right_likes_desc_type_main{
+    font-size: 15px;
+    opacity: 0.7;
+}
+.right_likes_desc_name_main{
+    font-size: 20px;
+    font-weight: bold;
+    word-break: break-all;
+    opacity: 0.8;
+
+    overflow :   hidden ;
+    text-overflow :   ellipsis ;
+    display :   -webkit-box ;
+    -webkit-line-clamp :   1 ;
+    -webkit-box-orient :   vertical ;
+}
+.right_likes_desc_money_main,.right_likes_desc_time_main,.right_likes_desc_likes_main{
+    font-size: 14px;
+}
+
+/*第六：充值*/
+.right_money_main{
+    width: 100%;
+    height: 50px;
+    font-size: 20px;
+    line-height: 50px;
+    opacity: 0.8;
+}
+.right_recharge_desc_main{
+    margin-top: 10px;
+    width: 100%;
+}
+.right_pay_main{
+    margin-top: 15px;
+    position: relative;
+    left: 85%;
+}
+
+/*第七：会员*/
+.right_member_slogan_main{
+    opacity: 0.8;
+    margin-bottom: 50px;
+}
+
+.el-icon-money4{
+    background: url("../../img/icon/money4.png") no-repeat;
+    background-size: 50px;
+}
+.el-icon-money4:before{
+    content: "\66ff";
+    font-size: 50px;
+    visibility: hidden;
+}
+.el-icon-money3{
+    background: url("../../img/icon/money3.png") no-repeat;
+    background-size: 40px;
+}
+.el-icon-money3:before{
+    content: "\66ff";
+    font-size: 40px;
+    visibility: hidden;
+}
+.el-icon-money2{
+    background: url("../../img/icon/money2.png") no-repeat;
+    background-size: 35px;
+}
+.el-icon-money2:before{
+    content: "\66ff";
+    font-size: 35px;
+    visibility: hidden;
+}
+.el-icon-money1{
+    background: url("../../img/icon/money1.png") no-repeat;
+    background-size: 25px;
+}
+.el-icon-money1:before{
+    content: "\66ff";
+    font-size: 25px;
+    visibility: hidden;
+}
+/*自定义点赞图标*/
+.el-icon-thumbs{
+    background: url("../../img/icon/thumbs.png") no-repeat;
+    background-size: 14px;
+}
+.el-icon-thumbs:before{
+    content: "\66ff";
+    font-size: 14px;
+    visibility: hidden;
+}
+/*自定义金钱图标*/
+.el-icon-moneys{
+    background: url("../../img/icon/moneys.png") no-repeat;
+    background-size: 14px;
+}
+.el-icon-moneys:before{
+    content: "\66ff";
+    font-size: 14px;
+    visibility: hidden;
+}
+/*自定义会员图标*/
+.el-icon-member{
+    background: url("../../img/icon/member.png") no-repeat;
+    background-size: 16px;
+}
+.el-icon-member:before{
+    content: "\66ff";
+    font-size: 16px;
+    visibility: hidden;
+}
+/*自定义充值图标*/
+.el-icon-recharge{
+    background: url("../../img/icon/recharge.png") no-repeat;
+    background-size: 18px;
+}
+.el-icon-recharge:before{
+    content: "\66ff";
+    font-size: 18px;
+    visibility: hidden;
+}
+/*自定义消息图标*/
+.el-icon-news{
+    background: url("../../img/icon/news.png") no-repeat;
+    background-size: 18px;
+}
+.el-icon-news:before{
+    content: "\66ff";
+    font-size: 18px;
+    visibility: hidden;
+}
+/*自定义评论图标*/
+.el-icon-comment{
+    background: url("../../img/icon/comment.png") no-repeat;
+    background-size: 19px;
+}
+.el-icon-comment:before{
+    content: "\66ff";
+    font-size: 19px;
+    visibility: hidden;
+}
+/*自定义攻略图标*/
+.el-icon-strategy{
+    background: url("../../img/icon/strategy.png") no-repeat;
+    background-size: 19px;
+}
+.el-icon-strategy:before{
+    content: "\66ff";
+    font-size: 19px;
+    visibility: hidden;
+}
+/*自定义收藏图标*/
+.el-icon-collections{
+    background: url("../../img/icon/collections.png") no-repeat;
+    background-size: 19px;
+}
+.el-icon-collections:before{
+    content: "\66ff";
+    font-size: 19px;
+    visibility: hidden;
+}
+/*自定义游戏图标*/
+.el-icon-game{
+    background: url("../../img/icon/game.png") no-repeat;
+    background-size: 20px;
+}
+.el-icon-game:before{
+    content: "\66ff";
+    font-size: 20px;
+    visibility: hidden;
+}
+/*自定义VIP图标*/
+.el-icon-vip{
+    background: url("../../img/icon/vip.png") no-repeat;
+    background-size: 20px;
+}
+.el-icon-vip:before{
+    content: "\66ff";
+    font-size: 20px;
+    visibility: hidden;
+}
+/*自定义非VIP图标*/
+.el-icon-unvip{
+    background: url("../../img/icon/unVIP.png") no-repeat;
+    background-size: 16px;
+}
+.el-icon-unvip:before{
+    content: "\66ff";
+    font-size: 16px;
+    visibility: hidden;
+}
+/*自定义身份图标*/
+.el-icon-identity2{
+    background: url("../../img/icon/identity2.png") no-repeat;
+    background-size: 16px;
+}
+.el-icon-identity2:before{
+    content: "\66ff";
+    font-size: 16px;
+    visibility: hidden;
+}
+/*自定义类型图标*/
+.el-icon-type{
+    background: url("../../img/icon/type.png") no-repeat;
+    background-size: 16px;
+}
+.el-icon-type:before{
+    content: "\66ff";
+    font-size: 16px;
+    visibility: hidden;
+}
+/*自定义金额图标*/
+.el-icon-moneys2{
+    background: url("../../img/icon/moneys.png") no-repeat;
+    background-size: 16px;
+}
+.el-icon-moneys2:before{
+    content: "\66ff";
+    font-size: 16px;
+    visibility: hidden;
+}
+/*自定义身份图标*/
+.el-icon-identity{
+    background: url("../../img/icon/identity.png") no-repeat;
+    background-size: 25px;
+    font-size: 25px;
+}
+.el-icon-identity:before{
+    content: "\66ff";
+    font-size: 25px;
+    visibility: hidden;
+}
+/*自定义退出图标*/
+.el-icon-quit{
+    background: url("../../img/icon/quit.png") center no-repeat;
+    background-size: 20px;
+}
+.el-icon-quit:before{
+    content: "\66ff";
+    font-size: 20px;
+    visibility: hidden;
+}

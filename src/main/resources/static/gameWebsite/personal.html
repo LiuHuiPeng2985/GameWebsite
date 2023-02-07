@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>个人主页</title>
+    <script src="../js/common/vue.js"></script>
+    <script src="../js/common/axios.js"></script>
+    <script src="../element-ui/index.js"></script>
+    <link rel="stylesheet" href="../element-ui/theme-chalk/index.css">
+    <link rel="stylesheet" href="../css/personal/personal.css">
+</head>
+<body>
+<div id="app">
+    <div class="header">
+        <el-row>
+            <el-col :span="24" class="elCol">
+                <!--网站logo-->
+                <div class="homepage_logo" style="display: inline-block">
+                    <img src="../img/homepage_logo.png" style="width: 70px;height: 50px">
+                </div>
+                <!--首页-->
+                <div class="homepage" style="display: inline-block">
+                    <a href="game.html">
+                        <div class="homepage">
+                            <i class="el-icon-house"><span style="font-weight: bold">首页</span></i>
+                        </div>
+                    </a>
+                </div>
+                <!--全部游戏-->
+                <div class="all_game" style="display: inline-block;" @mouseover="showGameType()" @mouseout="disShowGameType()">
+                    <a href="allGames.html">
+                        <div class="all_game">
+                            <i class="el-icon-coordinate"><span style="font-weight: bold">全部游戏<i class="el-icon-arrow-down"></i></span></i>
+                        </div>
+                    </a>
+                    <el-collapse-transition>
+                        <ul class="all_game_type" v-show="allGameType">
+                            <li><a href="gameType.html?休闲游戏">休闲游戏</a></li>
+                            <li><a href="gameType.html?即时战略">即时战略</a></li>
+                            <li><a href="gameType.html?射击游戏">射击游戏</a></li>
+                            <li><a href="gameType.html?恐怖惊悚">恐怖惊悚</a></li>
+                            <li><a href="gameType.html?格斗游戏">格斗游戏</a></li>
+                            <li><a href="gameType.html?模拟经营">模拟经营</a></li>
+                            <li><a href="gameType.html?生存类型">生存类型</a></li>
+                            <li><a href="gameType.html?竞速体育">竞速体育</a></li>
+                            <li><a href="gameType.html?角色扮演">角色扮演</a></li>
+                        </ul>
+                    </el-collapse-transition>
+                </div>
+                <!--游戏更新列表-->
+                <div class="update_list" style="display: inline-block">
+                    <a class="update_list_a" href="gameUpdateList.html">
+                        <div class="update_list" style="font-weight: bold">
+                            游戏更新列表
+                        </div>
+                    </a>
+                </div>
+                <!--资讯-->
+                <div class="notice" style="display: inline-block">
+                    <a href="notice.html">
+                        <div class="notice">
+                            <i class="el-icon-document-copy"><span style="font-weight: bold">资讯</span></i>
+                        </div>
+                    </a>
+                </div>
+                <!--游戏攻略及其它-->
+                <div class="strategy" style="display: inline-block" @mouseover="showStrategy()" @mouseout="disShowStrategy()">
+                    <a class="strategy_a" href="strategy.html">
+                        <div class="strategy" style="font-weight: bold">
+                            游戏攻略及其它
+                        </div>
+                    </a>
+                    <el-collapse-transition>
+                        <ul class="strategy_list" v-show="strategyList">
+                            <li><a class="strategy_list_a" href="strategy.html">常见问题</a></li>
+                        </ul>
+                    </el-collapse-transition>
+                </div>
+                <!--退出-->
+                <div class="quit">
+                    <el-popconfirm @confirm="sure" @cancel="not" title="确定退出吗？">
+                        <el-button icon="el-icon-quit" slot="reference">退出登录</el-button>
+                    </el-popconfirm>
+                </div>
+            </el-col>
+        </el-row>
+    </div>
+    <div class="main">
+        <!--个人信息(左)-->
+        <div style="width: 30%;height: 100%;float: left">
+            <div class="left_el_row">
+                <!--标题-->
+                <div class="left_title_main">
+                    <i class="el-icon-identity">基本信息</i>
+                </div><el-divider></el-divider>
+                <!--用户名-->
+                <div class="left_name_main">
+                    <i class="el-icon-s-custom"></i>用户名：<el-input
+                        class="left_name_input_main"
+                        type="text"
+                        placeholder="请输入内容"
+                        v-model.trim="userName"
+                        maxlength="6"
+                        show-word-limit
+                        :disabled="inputUserName"
+                ></el-input>
+                    <el-button-group>
+                        <el-button type="primary" icon="el-icon-edit" circle :disabled="edit" @click="editName"></el-button>
+                        <el-button type="success" icon="el-icon-check" circle :disabled="editSure" @click="SureEditName"></el-button>
+                    </el-button-group>
+                </div>
+                <!--账号-->
+                <div class="left_account_main">
+                    <i class="el-icon-user"></i>账号：{{userAccount}}
+                </div>
+                <!--创建时间-->
+                <div class="left_time_main">
+                    <i class="el-icon-time"></i>注册时间：{{userTime}}
+                </div>
+                <!--账号类型-->
+                <div class="left_type_main">
+                    <i class="el-icon-type"></i>账号类型：用户
+                </div>
+                <!--身份-->
+                <div class="left_identity_main">
+                    <i class="el-icon-identity2"></i>身份：
+                    <span v-if="userIdentity == 0" style="color: red">尊贵的VIP
+                        <el-tooltip content="已开通VIP" placement="top">
+                            <i class="el-icon-vip"></i>
+                        </el-tooltip>
+                    </span>
+                    <span v-else>普通用户
+                        <el-tooltip content="未开通VIP" placement="top">
+                            <i class="el-icon-unvip"></i>
+                        </el-tooltip>
+                    </span>
+                </div>
+                <!--账号余额-->
+                <div class="left_money_main">
+                    <i class="el-icon-moneys2"></i>账号余额：{{userMoney}}
+                </div><el-divider></el-divider>
+                <!--密码-->
+                <el-collapse class="left_password_main">
+                    <el-collapse-item title="修改密码">
+                        <el-form :model="passwordForm" :rules="rules" label-width="100px" ref="passwordForm" label-position="left" size="mini">
+                            <!--原密码-->
+                            <el-form-item label="原密码" prop="oldPassword">
+                                <el-input v-model="passwordForm.oldPassword" type="password" autocomplete="off" placeholder="请输入原密码"></el-input>
+                            </el-form-item>
+                            <!--密码-->
+                            <el-form-item label="新密码" prop="password">
+                                <el-input v-model="passwordForm.password" type="password" autocomplete="off" placeholder="请输入6-10位长度的新密码"></el-input>
+                            </el-form-item>
+                            <!--确认密码-->
+                            <el-form-item label="确认新密码" prop="checkPassword">
+                                <el-input v-model="passwordForm.checkPassword" type="password" autocomplete="off" placeholder="请再一次确认新密码"></el-input>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button type="primary" @click="submitPasswordForm('passwordForm')" style="width: 100%">确认修改</el-button>
+                            </el-form-item>
+                        </el-form>
+                    </el-collapse-item>
+                </el-collapse>
+            </div>
+        </div>
+        <!--主要功能(右)-->
+        <div style="width: 70%;height: 100%;float: right">
+            <div class="right_el_row">
+                <el-tabs type="border-card" class="right_el_tabs">
+                    <!--游戏仓库-->
+                    <el-tab-pane>
+                        <span slot="label"><i class="el-icon-game"></i> 游戏仓库</span>
+                        <!--没有游戏-->
+                        <div v-show="noGame">
+                            <el-empty style="height: 100%;line-height: 0" description="游戏仓库里什么也没有"></el-empty>
+                        </div>
+                        <!--有游戏时-->
+                        <el-row v-show="existGame">
+                            <el-col :span="4" class="right_game_goods_main" v-for="item in allGameList.slice((currentPage-1)*pageSize,currentPage*pageSize)">
+                                <el-card shadow="hover" style="height: 100%;border-radius: 10px;background-color: snow;padding: 0px">
+                                    <!--上层-->
+                                    <div class="right_game_img_main">
+                                        <a v-bind:href="nameUrl" @click="nameJump(item.gameId)"  style="cursor: pointer">
+                                            <img class="right_game_img_media" v-bind:src="item.img">
+                                        </a>
+                                    </div>
+                                    <!--下层-->
+                                    <div class="right_game_desc_main">
+                                        <!--游戏类型-->
+                                        <div class="right_game_desc_type_main">
+                                            <i class="el-icon-info"></i>
+                                            <a v-bind:href="typeUrl" @click="typeJump(item.type)"   style="cursor: pointer" >{{item.type}}</a>
+                                        </div>
+                                        <!--游戏名称-->
+                                        <div class="right_game_desc_name_main">
+                                            <a v-bind:href="nameUrl" @click="nameJump(item.gameId)" style="cursor: pointer">{{item.name}}</a>
+                                        </div>
+                                        <!--价格-->
+                                        <div class="right_game_desc_money_main">
+                                            <i class="el-icon-moneys"></i>
+                                                {{item.price}}
+                                        </div>
+                                        <!--购买时间-->
+                                        <div class="right_game_desc_time_main">
+                                            <i class="el-icon-time"></i>
+                                            {{item.buyTime}}
+                                        </div>
+                                    </div>
+                                </el-card>
+                            </el-col>
+                        </el-row>
+                        <el-pagination
+                                style="text-align: center"
+                                background
+                                :hide-on-single-page="true"
+                                @current-change="handleCurrentChange"
+                                :current-page="currentPage"
+                                :page-size="pageSize"
+                                :total="allGameList.length"
+                                layout="prev, pager, next">
+                        </el-pagination>
+                    </el-tab-pane>
+                    <!--点赞收藏-->
+                    <el-tab-pane>
+                        <span slot="label"><i class="el-icon-collections"></i> 点赞收藏</span>
+                        <!--没有点赞收藏-->
+                        <div v-show="noLikes">
+                            <el-empty style="height: 100%;line-height: 0" description="还没有点赞收藏任何游戏"></el-empty>
+                        </div>
+                        <!--有点赞收藏-->
+                        <el-row v-show="existLikes">
+                            <el-col :span="11" class="right_likes_goods_main" v-for="item in allLikesList.slice((currentPage-1)*pageSize2,currentPage*pageSize2)">
+                                <el-card shadow="hover" style="height: 100%;border-radius: 10px;background-color: snow;padding: 0px">
+                                    <!--左侧-->
+                                    <div class="right_likes_img_main">
+                                        <a v-bind:href="nameUrl" @click="nameJump(item.gameId)"  style="cursor: pointer">
+                                            <img class="right_likes_img_media" v-bind:src="item.img">
+                                        </a>
+                                    </div>
+                                    <!--右侧-->
+                                    <div class="right_likes_desc_main">
+                                        <!--游戏类型-->
+                                        <div class="right_likes_desc_type_main">
+                                            <i class="el-icon-info"></i>
+                                            <a v-bind:href="typeUrl" @click="typeJump(item.type)" style="cursor: pointer" >{{item.type}}</a>
+                                        </div>
+                                        <!--游戏名称-->
+                                        <div class="right_likes_desc_name_main">
+                                            <a v-bind:href="nameUrl" @click="nameJump(item.gameId)" style="cursor: pointer">{{item.name}}</a>
+                                        </div>
+                                        <!--价格-->
+                                        <div class="right_likes_desc_money_main">
+                                            <i class="el-icon-moneys"></i>
+                                            {{item.price}}
+                                        </div>
+                                        <!--点赞量-->
+                                        <div class="right_likes_desc_likes_main">
+                                            <i class="el-icon-thumbs"></i>
+                                            {{item.likes}}
+                                        </div>
+                                        <!--点赞时间-->
+                                        <div class="right_likes_desc_time_main">
+                                            <i class="el-icon-time"></i>
+                                            {{item.likesTime}}
+                                        </div>
+                                    </div>
+                                </el-card>
+                            </el-col>
+                        </el-row>
+                        <el-pagination
+                                style="text-align: center"
+                                background
+                                :hide-on-single-page="true"
+                                @current-change="handleCurrentChange"
+                                :current-page="currentPage"
+                                :page-size="pageSize2"
+                                :total="allLikesList.length"
+                                layout="prev, pager, next">
+                        </el-pagination>
+                    </el-tab-pane>
+                    <!--我的攻略-->
+                    <el-tab-pane>
+                        <span slot="label"><i class="el-icon-strategy"></i> 我的攻略</span>
+                        <!--没有点赞收藏-->
+                        <div v-show="noStrategy">
+                            <el-empty style="height: 100%;line-height: 0" description="您还没有发表任何攻略"></el-empty>
+                        </div>
+                        <!--有点赞收藏-->
+                        <div v-show="existStrategy">
+                            <el-table
+                                    border
+                                    :data="strategyTableData.slice((currentPage-1)*pageSize2,currentPage*pageSize2)"
+                                    style="width: 100%"
+                                    :default-sort = "{prop: 'date', order: 'descending'}">
+                                <el-table-column
+                                        prop="strategyCreateTime"
+                                        label="日期"
+                                        sortable
+                                        width="160">
+                                </el-table-column>
+                                <el-table-column
+                                        :show-overflow-tooltip="true"
+                                        prop="title"
+                                        label="标题"
+                                        width="180">
+                                </el-table-column>
+                                <el-table-column
+                                        :show-overflow-tooltip="true"
+                                        prop="content"
+                                        label="内容"
+                                        width="220">
+                                </el-table-column>
+                                <el-table-column
+                                        :show-overflow-tooltip="true"
+                                        prop="game"
+                                        label="游戏"
+                                        width="150">
+                                </el-table-column>
+                                <el-table-column
+                                        sortable
+                                        :formatter="passStateFormat"
+                                        prop="pass"
+                                        label="状态"
+                                        width="80">
+                                </el-table-column>
+                                <el-table-column label="操作">
+                                    <template slot-scope="scope">
+                                        <el-button
+                                                size="mini"
+                                                @click="handleSee(scope.row)">查看</el-button>
+                                        <el-popconfirm @confirm="handleDelete(scope.row)" @cancel="not" title="确定退出吗？">
+                                            <el-button
+                                                    slot="reference"
+                                                    size="mini"
+                                                    type="danger">删除</el-button>
+                                        </el-popconfirm>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                            <el-pagination
+                                    style="text-align: center"
+                                    background
+                                    :hide-on-single-page="true"
+                                    @current-change="handleCurrentChange"
+                                    :current-page="currentPage"
+                                    :page-size="pageSize2"
+                                    :total="strategyTableData.length"
+                                    layout="prev, pager, next">
+                            </el-pagination>
+                        </div>
+                    </el-tab-pane>
+                    <!--我的评论-->
+                    <el-tab-pane>
+                        <span slot="label"><i class="el-icon-comment"></i> 我的评论</span>
+                        <!--没有评论-->
+                        <div v-show="noComment">
+                            <el-empty style="height: 100%;line-height: 0" description="您还没有发表任何评论"></el-empty>
+                        </div>
+                        <!--有评论-->
+                        <div v-show="existComment" v-for="item in allCommentList.slice((currentPage-1)*pageSize3,currentPage*pageSize3)">
+                            <el-descriptions class="margin-top" :title="item.gameName" :column="1" border size="small">
+                                <template slot="extra">
+                                    <el-popconfirm @confirm="deleteComment(item.id)" @cancel="not" title="确定删除吗？">
+                                        <el-button type="danger" size="small" slot="reference">删除</el-button>
+                                    </el-popconfirm>
+                                </template>
+                                <el-descriptions-item>
+                                    <template slot="label">
+                                        <i class="el-icon-chat-dot-square"></i>
+                                        评论内容
+                                    </template>
+                                    {{item.commentDesc}}
+                                </el-descriptions-item>
+                                <el-descriptions-item>
+                                    <template slot="label">
+                                        <i class="el-icon-time"></i>
+                                        评论时间
+                                    </template>
+                                    {{item.commentTime}}
+                                </el-descriptions-item>
+                            </el-descriptions>
+                        </div>
+                        <el-pagination
+                                style="text-align: center;padding-top: 10px"
+                                background
+                                :hide-on-single-page="true"
+                                @current-change="handleCurrentChange"
+                                :current-page="currentPage"
+                                :page-size="pageSize3"
+                                :total="allCommentList.length"
+                                layout="prev, pager, next">
+                        </el-pagination>
+                    </el-tab-pane>
+                    <!--消息-->
+                    <el-tab-pane>
+                        <span slot="label"><i class="el-icon-news"></i> 消息</span>
+                        <!--没有消息-->
+                        <div v-show="noNews">
+                            <el-empty style="height: 100%;line-height: 0" description="没有任何消息"></el-empty>
+                        </div>
+                        <!--有消息-->
+                        <div v-show="existNews">
+                            <div v-for="item in allNewsList.slice((currentPage-1)*pageSize4,currentPage*pageSize4)">
+                            <el-collapse :accordion="true" v-model="activeName">
+                                <el-collapse-item title="购买游戏" v-if="item.newsType == 1" :name="item.id">
+                                    <div>您已成功购买本站第<a v-bind:href="nameUrl" @click="nameJump(item.gameId)" style="cursor: pointer;color: cornflowerblue"> {{item.gameId}} </a>号游戏，时间： {{item.sendTime}}</div>
+                                </el-collapse-item>
+                                <el-collapse-item title="充值" v-if="item.newsType == 2" :name="item.id">
+                                    <div>您已成功充值了<span style="color:red;"> {{item.recharge}}</span><span style="position: relative;left: 20px">时间：{{item.sendTime}}</span></div>
+                                </el-collapse-item>
+                                <el-collapse-item title="开通VIP" v-if="item.newsType == 3" :name="item.id">
+                                    <div><span style="color:red;">恭喜您，开通至尊VIP，您已成本站的会员</span><span style="position: relative;left: 20px">时间：{{item.sendTime}}</span></div>
+                                </el-collapse-item>
+                            </el-collapse>
+                            </div>
+                            <el-pagination
+                                    style="text-align: center;padding-top: 10px"
+                                    background
+                                    :hide-on-single-page="true"
+                                    @current-change="handleCurrentChange"
+                                    :current-page="currentPage"
+                                    :page-size="pageSize4"
+                                    :total="allNewsList.length"
+                                    layout="prev, pager, next">
+                            </el-pagination>
+                        </div>
+                    </el-tab-pane>
+                    <!--充值-->
+                    <el-tab-pane>
+                        <span slot="label"><i class="el-icon-recharge"></i> 充值</span>
+                        <!--账号余额-->
+                        <div class="right_money_main">
+                            当前账号余额：{{userMoney}}
+                        </div><el-divider></el-divider>
+                        <!--充值-->
+                        <div class="right_recharge_main">
+                            <div>充值一：</div>
+                            <div class="right_recharge_desc_main">
+                                <div>
+                                    <el-radio v-model="radio" label="50" border style="height: 150px;width: 200px;" @change="payNum">
+                                        <div style="margin-top: 25px;text-align: center">
+                                            <i class="el-icon-money1" ></i>
+                                            <div style="margin-top: 10px">50</div>
+                                        </div>
+                                    </el-radio>
+                                    <el-radio v-model="radio" label="100" border style="height: 150px;width: 200px;" @change="payNum">
+                                        <div style="margin-top: 15px;text-align: center">
+                                            <i class="el-icon-money2" ></i>
+                                            <div style="margin-top: 10px">100</div>
+                                        </div>
+                                    </el-radio>
+                                    <el-radio v-model="radio" label="200" border style="height: 150px;width: 200px;" @change="payNum">
+                                        <div style="margin-top: 10px;text-align: center">
+                                            <i class="el-icon-money3" ></i>
+                                            <div style="margin-top: 10px">200</div>
+                                        </div>
+                                    </el-radio>
+                                    <el-radio v-model="radio" label="500" border style="height: 150px;width: 200px;" @change="payNum">
+                                        <div style="text-align: center">
+                                            <i class="el-icon-money4" ></i>
+                                            <div style="margin-top: 10px">500</div>
+                                        </div>
+                                    </el-radio>
+                                    <el-button type="primary" @click="payFirst()" :loading="loading1" class="right_pay_main" :disabled="disabledPay">{{ loading1 ? '交易中 ...' : '确认充值' }}</el-button>
+                                </div><el-divider></el-divider>
+                                <div>充值二：</div>
+                                <div class="block">
+                                    <el-slider
+                                            @change="changeRechargeValue"
+                                            v-model="rechargeValue"
+                                            show-input>
+                                    </el-slider>
+                                    <el-button type="primary" @click="payFirst2()" :loading="loading2" class="right_pay_main" :disabled="disabledPay2">{{ loading2 ? '交易中 ...' : '确认充值' }}</el-button>
+                                </div>
+                            </div>
+                        </div>
+                    </el-tab-pane>
+                    <!--会员-->
+                    <el-tab-pane>
+                        <span slot="label"><i class="el-icon-member"></i> 会员</span>
+                        <div class="right_member_title_main">
+                            <h3 style="opacity: 0.8">开通会员，享受更多权益</h3>
+                        </div><el-divider></el-divider>
+                        <div class="right_member_slogan_main">
+                            花费<i class="el-icon-moneys" style="color: red">500</i>成为VIP会员，可以选择本站的一个游戏<span style="color: red">免费</span>赠送<br/><br/>
+                            <div>开启VIP后，将获得<span style="color:red;">VIP标识</span></div>
+                        </div>
+                        <div>
+                            <el-select v-model="value" @change="optionGame" placeholder="请选择您想要的游戏" :disabled="selectGames">
+                                <el-option
+                                        v-for="item in gameOptions"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.id">
+                                </el-option>
+                            </el-select>
+                            <el-button type="primary" @click="payFirst3()" :loading="loading3" :disabled="disabledPay3">{{ loading3 ? '开通中 ...' : '开通会员' }}</el-button>
+                        </div>
+                    </el-tab-pane>
+                </el-tabs>
+            </div>
+        </div>
+    </div>
+    <!--刷新-->
+    <span
+            type="primary"
+            @click="openFullScreen">
+    </span>
+</div>
+<script>
+    var c = 0;
+    var app = new Vue({
+        el:"#app",
+        data(){
+            /*确认密码*/
+            var validatePass = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入密码'));
+                } else {
+                    if (this.passwordForm.checkPassword !== '') {
+                        this.$refs.passwordForm.validateField('checkPassword');
+                    }
+                    callback();
+                }
+            };
+            var validatePass2 = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请再次输入密码'));
+                } else if (value !== this.passwordForm.password) {
+                    callback(new Error('两次输入密码不一致!'));
+                } else {
+                    callback();
+                }
+            };
+            return{
+                allGameType:false,
+                strategyList:false,
+                /*用户名*/
+                userName:'',
+                inputUserName:true,
+                edit:false,
+                editSure:true,
+                /*个人信息*/
+                userAccount:'',
+                userTime:'',
+                userMoney:'',
+                userIdentity:'',
+                /*修改密码表单*/
+                passwordForm: {
+                    oldPassword: '',
+                    password: '',
+                    checkPassword: '',
+                },
+                /*修改密码验证*/
+                rules: {
+                    oldPassword: [
+                        { required: true, message: '请输入原密码', trigger: 'blur' },
+                    ],
+                    password: [
+                        { required: true, message: '请输入新密码', trigger: 'blur' },
+                        { min: 6, max: 10, message: '请设置6-10位数的密码', trigger: 'blur' },
+                        { validator: validatePass, trigger: 'blur' }
+                    ],
+                    checkPassword: [
+                        { required: true, message: '请输入新密码', trigger: 'blur' },
+                        { validator: validatePass2, trigger: 'blur' }
+                    ]
+                },
+                /*游戏仓库*/
+                noGame:true,
+                existGame:false,
+                allGameList:'',
+                currentPage: 1, //第一页
+                pageSize: 10,  //每页10个数据
+                /*游戏类型跳转*/
+                typeUrl:'',
+                /*游戏名跳转详细页*/
+                nameUrl:'',
+                /*点赞收藏*/
+                noLikes:true,
+                existLikes:false,
+                allLikesList:'',
+                pageSize2: 8,
+                /*攻略*/
+                noStrategy:true,
+                existStrategy:false,
+                strategyTableData: [{
+                    strategyCreateTime: '',
+                    title: '',
+                    content: '',
+                    game: '',
+                    pass: '',
+                }],
+                /*评论*/
+                noComment:true,
+                existComment:false,
+                allCommentList:'',
+                pageSize3: 4,   //每页4个数据
+                /*消息*/
+                noNews:true,
+                existNews:false,
+                allNewsList:'',
+                pageSize4: 9,   //每页9个数据
+                activeName:'',
+                /*充值一*/
+                radio: '',
+                disabledPay: true,
+                loading1: false,
+                /*充值二*/
+                rechargeValue: 0,
+                disabledPay2: true,
+                loading2: false,
+                /*开通VIP*/
+                disabledPay3: true,
+                loading3: false,
+                gameOptions: '',
+                value: '',
+                selectGames: false,
+            }
+        },
+        methods:{
+            /*展示隐藏的游戏类型*/
+            showGameType(){
+                this.allGameType=true;
+            },
+            /*隐藏的游戏类型*/
+            disShowGameType(){
+                this.allGameType=false;
+            },
+            /*展示游戏攻略及其它*/
+            showStrategy(){
+                this.strategyList=true;
+            },
+            /*隐藏的游戏攻略及其它*/
+            disShowStrategy(){
+                this.strategyList=false;
+            },
+            /*是否退出登录*/
+            sure(){
+                const loading = this.$loading({
+                    lock: true,
+                    text: '正在退出，请勿操作',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.9)'
+                });
+                setTimeout(() => {
+                    loading.close();
+                    sessionStorage.removeItem('userId');
+                    parent.location.href = 'login.html';
+                }, 2000);
+            },
+            not(){
+                this.$message.success("取消操作成功")
+            },
+            /*刷新*/
+            openFullScreen() {
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(255, 255, 255, 0.7)'
+                });
+                setTimeout(() => {
+                    loading.close();
+                }, 1000);
+            },
+            /*开启编辑用户名*/
+            editName(){
+                this.inputUserName = false;
+                this.editSure = false;
+                this.edit = true;
+            },
+            /*确认更改用户名*/
+            SureEditName(){
+                if (this.userName.length <2){
+                    this.$message.error("编辑失败，请重新操作")
+                }else {
+                    axios.put("/user/edit",{userId:sessionStorage.getItem('userId'),userName:this.userName}).then((res)=>{
+                        this.inputUserName = true;
+                        this.editSure = true;
+                        this.edit = false;
+                        this.$message.success("编辑成功");
+                    },function (err) {
+                        alert('错误');
+                    })
+                }
+            },
+            /*修改密码*/
+            submitPasswordForm(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        /*连接后端*/
+                        axios.post("/user/password",{userId:sessionStorage.getItem('userId'),oldPassword:this.passwordForm.oldPassword,password:this.passwordForm.password}).then((res)=>{
+                            if (res.data.code == 200){
+                                this.$message.success(res.data.msg);
+                            }else {
+                                this.$message.error(res.data.msg);
+                            }
+                        },function(err){
+                            alert('失败');
+                        })
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
+            },
+            /*游戏仓库*/
+            gameWarehouse(){
+                axios.get("/storehouse/all/"+sessionStorage.getItem('userId')).then((res)=>{
+                        if (res.data.data.length == 0){
+                            this.noGame = true;
+                            this.existGame = false;
+                        }else {
+                            this.noGame = false;
+                            this.existGame = true;
+                            this.currentPage = 1;
+                            this.allGameList = res.data.data;
+                        }
+                },function(err){
+                    alert('失败');
+                })
+            },
+            /*页数更新*/
+            handleCurrentChange(currentPage){
+                this.currentPage = currentPage;
+            },
+            /*游戏类型跳转*/
+            typeJump(type){
+                if (type == "休闲游戏"){
+                    this.typeUrl = "gameType.html?休闲游戏"
+                }else if (type == "即时战略"){
+                    this.typeUrl = "gameType.html?即时战略"
+                }else if (type == "射击游戏"){
+                    this.typeUrl = "gameType.html?射击游戏"
+                }else if (type == "恐怖惊悚"){
+                    this.typeUrl = "gameType.html?恐怖惊悚"
+                }else if (type == "格斗游戏"){
+                    this.typeUrl = "gameType.html?格斗游戏"
+                }else if (type == "模拟经营"){
+                    this.typeUrl = "gameType.html?模拟经营"
+                }else if (type == "生存类型"){
+                    this.typeUrl = "gameType.html?生存类型"
+                }else if (type == "竞速体育"){
+                    this.typeUrl = "gameType.html?竞速体育"
+                }else{
+                    this.typeUrl = "gameType.html?角色扮演"
+                }
+            },
+            /*通过游戏名跳转页面详情页*/
+            nameJump(gameId){
+                this.nameUrl = "gameDetails.html?"+gameId;
+            },
+            /*点赞收藏*/
+            userLikes(){
+                axios.get("/likes/all/"+sessionStorage.getItem('userId')).then((res)=>{
+                    if (res.data.data.length == 0){
+                        this.noLikes = true;
+                        this.existLikes = false;
+                    }else {
+                        this.noLikes = false;
+                        this.existLikes = true;
+                        this.currentPage = 1;
+                        this.allLikesList = res.data.data;
+                    }
+                },function(err){
+                    alert('失败');
+                })
+            },
+            /*用户个人攻略*/
+            userStrategy(){
+                axios.get("/strategy/all/"+sessionStorage.getItem('userId')).then((res)=>{
+                    if (res.data.data.length == 0){
+                        this.noStrategy = true;
+                        this.existStrategy = false;
+                    }else {
+                        this.noStrategy = false;
+                        this.existStrategy = true;
+                        this.currentPage = 1;
+                        this.strategyTableData = res.data.data;
+                    }
+                },function(err){
+                    alert('失败');
+                })
+            },
+            /*查看攻略*/
+            handleSee(row) {
+                axios.get("/strategy/desc/"+row.id).then((res)=>{
+                    this.$alert(res.data.data.content, res.data.data.title, {
+                        confirmButtonText: '确定',
+                    });
+                },function(err){
+                    alert('失败');
+                })
+            },
+            not(){
+                this.$message.success("已取消操作")
+            },
+            /*删除攻略*/
+            handleDelete(row) {
+                axios.get("/strategy/delete/"+row.id).then((res)=>{
+                    const loading = this.$loading({
+                        lock: true,
+                        text: '删除中',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(255, 255, 255, 0.7)'
+                    });
+                    setTimeout(() => {
+                        loading.close();
+                        this.$message.success("删除成功");
+                        this.userStrategy();
+                    }, 500);
+                },function(err){
+                    alert('失败');
+                })
+            },
+            /*攻略状态*/
+            passStateFormat(row) {
+                if (row.pass === 0) {
+                    return '审核中'
+                } else if(row.pass === 1){
+                    return '通过'
+                } else{
+                    return '未通过'
+                }
+            },
+            /*用户评论*/
+            userComment(){
+                axios.get("/comment/all/"+sessionStorage.getItem('userId')).then((res)=>{
+                    if (res.data.data.length == 0){
+                        this.noComment = true;
+                        this.existComment = false;
+                    }else {
+                        this.noComment = false;
+                        this.existComment = true;
+                        this.currentPage = 1;
+                        this.allCommentList = res.data.data;
+                    }
+                },function(err){
+                    alert('失败');
+                })
+            },
+            /*删除评论*/
+            deleteComment(id){
+                axios.get("/comment/delete/"+id).then((res)=>{
+                    const loading = this.$loading({
+                        lock: true,
+                        text: '删除中',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(255, 255, 255, 0.7)'
+                    });
+                    setTimeout(() => {
+                        loading.close();
+                        this.$message.success("删除成功");
+                        this.userComment();
+                    }, 500);
+                },function(err){
+                    alert('失败');
+                })
+            },
+            /*消息*/
+            userNews(){
+                axios.get("/news/all/"+sessionStorage.getItem('userId')).then((res)=>{
+                    if (res.data.data.length == 0){
+                        this.noNews = true;
+                        this.existNews = false;
+                    }else {
+                        this.noNews = false;
+                        this.existNews = true;
+                        this.currentPage = 1;
+                        this.allNewsList = res.data.data;
+                    }
+                },function(err){
+                    alert('失败');
+                })
+            },
+            /*个人信息*/
+            personalInformation(){
+                axios.get("/user/information/"+sessionStorage.getItem('userId')).then((res)=>{
+                    this.userName = res.data.data.name;
+                    this.userAccount = res.data.data.account;
+                    this.userTime = res.data.data.createTime;
+                    this.userMoney = res.data.data.money;
+                    this.userIdentity = res.data.data.identity;
+                    if (res.data.data.identity == 0){
+                        this.selectGames = true;
+                    }
+                },function(err){
+                    alert('失败');
+                })
+            },
+            /*第一种支付方式*/
+            payNum(){
+                this.disabledPay = false;
+            },
+            payFirst() {
+                if (this.loading1) {
+                    return;
+                }
+                this.$confirm('确定要充值吗？')
+                    .then(_ => {
+                        this.loading1 = true;
+                        this.timer = setTimeout(() => {
+                            // 动画关闭需要一定的时间
+                            setTimeout(() => {
+                                this.loading1 = false;
+                                axios.post("/news/recharge",{userId:sessionStorage.getItem('userId'),recharge:this.radio}).then((res)=>{
+                                    const loading = this.$loading({
+                                        lock: true,
+                                        text: '正在交易，请稍等',
+                                        spinner: 'el-icon-loading',
+                                        background: 'rgba(0, 0, 0, 0.9)'
+                                    });
+                                    setTimeout(() => {
+                                        loading.close();
+                                        this.$message.success("充值成功");
+                                        const h = this.$createElement;
+                                        this.$notify({
+                                            title: '充值成功',
+                                            message: h('i', { style: 'color: teal'}, '交易已完成，交易消息已发送，可前往查看')
+                                        });
+                                        this.userNews();
+                                        this.personalInformation();
+                                    }, 2000);
+                                },function(err){
+                                    alert('失败');
+                                })
+                            }, 400);
+                        }, 2000);
+                    })
+                    .catch(_ => {});
+            },
+            /*第二种支付方式*/
+            changeRechargeValue(){
+                if (this.rechargeValue != 0){
+                    this.disabledPay2 = false;
+                }
+                else {
+                    this.disabledPay2 = true;
+                }
+            },
+            payFirst2() {
+                if (this.loading2) {
+                    return;
+                }
+                this.$confirm('确定要充值吗？')
+                    .then(_ => {
+                        this.loading2 = true;
+                        this.timer = setTimeout(() => {
+                            // 动画关闭需要一定的时间
+                            setTimeout(() => {
+                                this.loading2 = false;
+                                axios.post("/news/recharge",{userId:sessionStorage.getItem('userId'),recharge:this.rechargeValue}).then((res)=>{
+                                    const loading = this.$loading({
+                                        lock: true,
+                                        text: '正在交易，请稍等',
+                                        spinner: 'el-icon-loading',
+                                        background: 'rgba(0, 0, 0, 0.9)'
+                                    });
+                                    setTimeout(() => {
+                                        loading.close();
+                                        this.$message.success("充值成功");
+                                        const h = this.$createElement;
+                                        this.$notify({
+                                            title: '充值成功',
+                                            message: h('i', { style: 'color: teal'}, '交易已完成，交易消息已发送，可前往查看')
+                                        });
+                                        this.userNews();
+                                        this.personalInformation();
+                                    }, 2000);
+                                },function(err){
+                                    alert('失败');
+                                })
+                            }, 400);
+                        }, 2000);
+                    })
+                    .catch(_ => {});
+            },
+            /*获取游戏*/
+            getAllGame(){
+                axios.get("/game/all/time").then((res)=>{
+                    this.gameOptions = res.data.data;
+                },function(err){
+                    alert('失败');
+                })
+            },
+            /*开通会员*/
+            optionGame(){
+                this.disabledPay3 = false;
+            },
+            payFirst3() {
+                if (this.loading3) {
+                    return;
+                }
+                this.$confirm('确定要开通VIP吗？请确保您选择的游戏是未拥有的')
+                    .then(_ => {
+                        this.loading3 = true;
+                        this.timer = setTimeout(() => {
+                            // 动画关闭需要一定的时间
+                            setTimeout(() => {
+                                this.loading3 = false;
+                                if (this.userMoney < 500){
+                                    this.$message.error("抱歉，您的余额不足，开通失败");
+                                }else {
+                                    axios.post("/news/member",{userId:sessionStorage.getItem('userId'),gameId:this.value}).then((res)=>{
+                                        const loading = this.$loading({
+                                            lock: true,
+                                            text: '正在开通，请稍等',
+                                            spinner: 'el-icon-loading',
+                                            background: 'rgba(0, 0, 0, 0.9)'
+                                        });
+                                        setTimeout(() => {
+                                            loading.close();
+                                            this.$message.success("开通成功");
+                                            const h = this.$createElement;
+                                            this.$notify({
+                                                title: '开通会员成功',
+                                                dangerouslyUseHTMLString: true,
+                                                message: '<strong>尊敬的用户，您已成功开通本站会员，可前往消息界面查看<br/>您选取的游戏已到您的游戏仓库<br/>您已获得VIP标识，个人信息已经更换</strong>'
+                                            });
+                                            this.gameWarehouse();
+                                            this.userNews();
+                                            this.personalInformation();
+                                            this.disabledPay3 = true;
+                                            this.selectGames = true;
+                                        }, 2000);
+                                    },function(err){
+                                        alert('失败');
+                                    })
+                                }
+                            }, 400);
+                        }, 2000);
+                    })
+                    .catch(_ => {});
+            },
+        },
+        /*页面加载完毕执行函数*/
+        mounted: function(){
+            this.getAllGame();
+            this.personalInformation();
+            this.userNews();
+            this.userComment();
+            this.userStrategy();
+            this.userLikes();
+            this.gameWarehouse();
+            /*当前登录的用户id*/
+            console.log(sessionStorage.getItem('userId'));
+        },
+    })
+</script>
+</body>
+</html>

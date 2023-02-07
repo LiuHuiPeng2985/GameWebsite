@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>游戏攻略及其它</title>
+    <script src="../js/common/vue.js"></script>
+    <script src="../js/common/axios.js"></script>
+    <script src="../element-ui/index.js"></script>
+    <link rel="stylesheet" href="../element-ui/theme-chalk/index.css">
+    <link rel="stylesheet" href="../css/other/game_strategy.css">
+</head>
+<body>
+<div id="app">
+    <el-row>
+        <!--标题-->
+        <el-col :span="18" :offset="3">
+            <div class="title">
+                游戏攻略专栏<span style="font-size: 15px;padding-left: 30px;opacity: 0.5;"><a href="game.html">>>> 返回 <<<</a></span>
+            </div>
+        </el-col>
+        <!--搜索主体-->
+        <el-col :span="16" :offset="4">
+            <el-card shadow="always" style="width: 503px;border-radius: 20px">
+                <div class="search">
+                    <div class="search_left">
+                        <i class="el-icon-search search_left_i"></i>
+                    </div>
+                    <div class="search_right">
+                        <el-input
+                                style="border: 0px;width: 80%"
+                                placeholder="请输入你要查找的攻略"
+                                v-model="title"
+                                clearable>
+                        </el-input>
+                        <el-button class="search_right_button" type="danger" plain @click="findStrategy">查询</el-button>
+                    </div>
+                </div>
+            </el-card>
+        </el-col>
+        <!--攻略主体-->
+        <el-col :span="16" :offset="4">
+            <div style="position: relative;top: 50px;">
+                <!--表格-->
+                <el-table
+                        :data="tableData"
+                        style="width: 100%;border-radius: 20px">
+                    <el-table-column type="expand">
+                        <template slot-scope="props">
+                            <el-form label-position="left" inline class="demo-table-expand">
+                                <el-form-item label="攻略标题" class="table_title">
+                                    <span>{{props.row.title}}</span>
+                                </el-form-item>
+                                <el-form-item label="攻略游戏" class="table_name">
+                                    <span>{{props.row.game}}</span>
+                                </el-form-item>
+                                <el-form-item label="作者" class="table_userName">
+                                    <span>{{props.row.userName}}</span>
+                                </el-form-item>
+                                <el-form-item label="发布时间" class="table_strategyCreateTime">
+                                    <span>{{props.row.strategyCreateTime}}</span>
+                                </el-form-item>
+                                <el-form-item label="内容" style="width: 80%;" class="table_content">
+                                    <span>{{props.row.content}}</span>
+                                </el-form-item>
+                            </el-form>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            label="攻略标题"
+                            prop="title">
+                    </el-table-column>
+                    <el-table-column
+                            label="作者"
+                            prop="userName">
+                    </el-table-column>
+                    <el-table-column
+                            label="时间"
+                            prop="strategyCreateTime">
+                    </el-table-column>
+                </el-table>
+            </div>
+        </el-col>
+    </el-row>
+    <!--编辑-->
+    <div class="edit">
+        <i class="el-icon-edit edit_i" @click="showEdit=true"></i>
+    </div>
+    <!--编写攻略-->
+    <el-dialog :visible.sync="showEdit" width="40%" center @close="resetForm">
+        <el-form :model="editForm" :rules="rules" ref="editForm" label-position="top" size="medium" :inline="true">
+            <!--标题-->
+            <el-form-item label="攻略标题*" prop="title">
+                <el-input style="width:400px" v-model="editForm.title" type="text" placeholder="请输入标题"></el-input>
+            </el-form-item>
+            <!--游戏-->
+            <el-form-item label="攻略游戏*" prop="game">
+                <el-input v-model="editForm.game" type="text" placeholder="请输入游戏名"></el-input>
+            </el-form-item><br/>
+            <!--内容-->
+            <el-form-item label="攻略内容*" prop="content">
+                <el-input style="width:550px" v-model="editForm.content" type="textarea" placeholder="请输入内容"></el-input>
+            </el-form-item><br/>
+            <el-form-item>
+                <el-button type="primary" @click="submitEditForm('editForm')" style="width: 100%">提交攻略</el-button>
+            </el-form-item>
+            <span class="edit_introduce">当您提交了攻略后，我们将对您的攻略进行审核，您可到个人中心查看进度</span>
+        </el-form>
+    </el-dialog>
+    <el-col :span="18" :offset="3">
+        <div class="footer"></div>
+    </el-col>
+    <!--返回顶部-->
+    <el-backtop style="right: 100px">
+        <i class="el-icon-rocket" ></i>
+    </el-backtop>
+</div>
+<script>
+    var app = new Vue({
+        el:"#app",
+        data() {
+            return {
+                title:'',
+                tableData: [],
+                /*编写攻略*/
+                showEdit:false,
+                /*编写攻略表单*/
+                editForm: {
+                    title: '',
+                    game: '',
+                    content: '',
+                },
+                /*表单验证*/
+                rules: {
+                    title: [
+                        { required: true, message: '请输入您要编写的攻略标题', trigger: 'blur' },
+                    ],
+                    game: [
+                        { required: true, message: '请输入您编写攻略所对应的游戏名', trigger: 'blur' },
+                    ],
+                    content: [
+                        { required: true, message: '请输入您要编写的攻略内容', trigger: 'blur' },
+                    ],
+                },
+            }
+        },
+        methods:{
+            /*攻略列表*/
+            getAllStrategy(){
+                axios.get("/strategy/list").then((res)=>{
+                    this.tableData = res.data.data;
+                },function(err){
+                    alert('失败');
+                })
+            },
+            /*查找攻略*/
+            findStrategy(){
+                sessionStorage.getItem('userId')
+                console.log(sessionStorage.getItem('userId'))
+                axios.get("/strategy/find/"+this.title).then((res)=>{
+                    if (res.data.data == '' || res.data.data == null){
+                        this.$message.error("未能查到相应攻略");
+                    }else {
+                        this.$message.success("查询成功");
+                        this.tableData = res.data.data;
+                    }
+                },function(err){
+                    alert('输入不能为空');
+                })
+            },
+            /*重置编写表单*/
+            resetForm(){
+                this.$refs['editForm'].resetFields();
+            },
+            /*提交攻略*/
+            submitEditForm(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        /*连接后端*/
+                        axios.post("/strategy/write/"+sessionStorage.getItem('userId'),this.editForm).then((res)=>{
+                            if(res.data.code == 200) {
+                                this.$message.success(res.data.msg);
+                                this.showEdit = false;
+                            }else {
+                                this.$message.error("系统出错");
+                            }
+                        },function(err){
+                            alert('失败');
+                        })
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
+            },
+        },
+        /*页面加载完毕执行函数*/
+        mounted: function(){
+            this.getAllStrategy();
+        },
+    })
+</script>
+</body>
+</html>

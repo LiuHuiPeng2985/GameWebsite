@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>游戏资讯</title>
+    <script src="../js/common/vue.js"></script>
+    <script src="../js/common/axios.js"></script>
+    <script src="../element-ui/index.js"></script>
+    <link rel="stylesheet" href="../element-ui/theme-chalk/index.css">
+    <link rel="stylesheet" href="../css/other/game_notice.css">
+</head>
+<body>
+<div id="app">
+    <el-row>
+        <!--标题-->
+        <el-col :span="20" :offset="2">
+            <div class="title">
+                游戏资讯<span style="font-size: 15px;font-weight: normal"> 点击图片查看游戏详情</span><span style="font-size: 15px;padding-left: 30px;opacity: 0.5;"><a href="game.html">>>> 返回 <<<</a></span>
+            </div>
+        </el-col>
+        <el-col :span="20" :offset="2" class="top">
+            <!--宣传图片整体-->
+            <div style="width: 100%;height: 500px;">
+                <!--左侧轮播图-->
+                <div class="top_left">
+                    <el-carousel height="500px">
+                        <el-carousel-item v-for="(img,index) in imgList" :key="index">
+                            <a v-bind:href="img.href"><img v-bind:src="img.url" style="width: 100%;height: 500px;border-radius: 30px;"></a>
+                        </el-carousel-item>
+                    </el-carousel>
+                </div>
+                <!--右侧-->
+                <div class="top_right">
+                    <div class="top_right_first">
+                        <el-card shadow="hover" style="width: 100%;height: 100%;border-radius: 20px;">
+                            <div style="width: 100%;height: 100%;border-radius : 20px 20px 0 0;">
+                                <a href="gameDetails.html?11">
+                                    <img src="../img/game/EldenRing.jpg" width="100%" height="190px">
+                                </a>
+                            </div>
+                            <div class="top_right_desc">
+                                《Elden Ring》是一款黑暗幻想类的动作角色扮演游戏。该作更加注重RPG元素，继续保持高难度，玩家将体验到战胜困难所带来的乐趣。在Elden Ring的世界里充斥着危险和威胁，有很多地方等待探索。玩家会见到一些错综复杂的地图设计，充满层次感的城堡，以及许多类似的要素。
+                            </div>
+                        </el-card>
+                    </div>
+                    <div class="top_right_second">
+                        <el-card shadow="hover" style="width: 100%;height: 100%;border-radius: 20px;">
+                            <div style="width: 100%;height: 100%;border-radius : 20px 20px 0 0;">
+                                <a href="gameDetails.html?14">
+                                    <img src="../img/game/Left4Dead2.png" width="100%" height="190px">
+                                </a>
+                            </div>
+                            <div class="top_right_desc">
+                                《求生之路2(Left 4 Dead 2)》是由Valve制作发行的一款以僵尸大灾难为背景的第一人称FPS游戏，是人气游戏《求生之路》的最新续作。游戏将带领你和你的好友穿过城市，沼泽，深入南部的墓地，从沙凡那港市到新奥尔良，沿途经过 5 个漫长的战役。 你会扮演四名新生还者中的一名，装备有大量先进的武器。
+                            </div>
+                        </el-card>
+                    </div>
+                    <div class="top_right_third">
+                        <el-card shadow="hover" style="width: 100%;height: 100%;border-radius: 20px;">
+                            <div style="width: 100%;height: 100%;border-radius : 20px 20px 0 0;">
+                                <a href="gameDetails.html?31">
+                                    <img src="../img/game/DevilMayCry5.jpg" width="100%" height="190px">
+                                </a>
+                            </div>
+                            <div class="top_right_desc">
+                                最强的恶魔猎人强势回归！动作游戏迷翘首以待，传说中的Stylish Action《Devil May Cry》终于復活！
+                            </div>
+                        </el-card>
+                    </div>
+                    <div class="top_right_fourth">
+                        <el-card shadow="hover" style="width: 100%;height: 100%;border-radius: 20px;">
+                            <div style="width: 100%;height: 100%;border-radius : 20px 20px 0 0;">
+                                <a href="gameDetails.html?28">
+                                    <img src="../img/game/Terraria.jpg" width="100%" height="190px">
+                                </a>
+                            </div>
+                            <div class="top_right_desc">
+                                《泰拉瑞亚》是由Re-Logic公司开发的一款高自由度的沙盒游戏，于2011年5月16日在PC上发行。玩家可以在游戏中做很多事情：制造武器战胜各种各样的敌人及群落；挖掘地下寻找器材配件、金钱和其他有用的东西；收集木材，石材，矿石等资源；用世界里的一切创造你需要的东西并守护它。
+                            </div>
+                        </el-card>
+                    </div>
+                </div>
+            </div>
+        </el-col>
+        <el-col :span="20" :offset="2" class="bottom">
+            <div class="title">
+                年度游戏<span style="font-size: 15px;font-weight: normal"> 以下游戏均已在本站上架，点击游戏名即可查看</span>
+            </div>
+        </el-col>
+        <el-col :span="18" :offset="3" class="bottom_desc">
+            <div>
+                <a href="gameDetails.html?32">双人成行</a>
+                <el-tag>2021年TGA年度游戏</el-tag>
+                <el-tag type="success">最受玩家喜爱游戏</el-tag>
+                <el-tag type="info">最佳家庭游戏</el-tag>
+                <el-tag type="warning">最具创新游戏</el-tag>
+                <el-tag type="danger">最佳游戏设计</el-tag>
+            </div><br>
+            <div>
+                <a href="gameDetails.html?26">只狼：影逝二度</a>
+                <el-tag>2019年TGA年度游戏</el-tag>
+                <el-tag type="success">最佳动作游戏</el-tag>
+                <el-tag type="info">最佳游戏指导</el-tag>
+                <el-tag type="warning">最佳艺术指导</el-tag>
+                <el-tag type="danger">最佳音效设计</el-tag>
+            </div><br>
+            <div>
+                <a href="gameDetails.html?33">战神4</a>
+                <el-tag>2018年TGA年度游戏</el-tag>
+                <el-tag type="success">最佳导演游戏</el-tag>
+                <el-tag type="info">最佳动作冒险游戏</el-tag>
+            </div><br>
+            <div>
+                <a href="gameDetails.html?34">塞尔达传说：旷野之息</a>
+                <el-tag>2017年TGA年度游戏</el-tag>
+                <el-tag type="success">杰出游戏性奖</el-tag>
+                <el-tag type="info">杰出游戏设计奖</el-tag>
+                <el-tag type="warning">年度电子游戏</el-tag>
+            </div><br>
+            <div>
+                <a href="gameDetails.html?12">巫师3：狂猎</a>
+                <el-tag>2015年TGA年度游戏</el-tag>
+                <el-tag type="success">2016年最佳游戏角色扮演游戏奖</el-tag>
+            </div><br>
+        </el-col>
+    </el-row>
+</div>
+<script>
+    var app = new Vue({
+        el:"#app",
+        data() {
+            return {
+                /*轮播图*/
+                imgList:[
+                    {url:('../img/game/ForzaHorizon5.jpg'),href:('gameDetails.html?3')},
+                    {url:('../img/game/Cyberpunk2077.png'),href:('gameDetails.html?13')},
+                    {url:('../img/game/DaysGone.jpg'),href:('gameDetails.html?18')},
+                    {url:('../img/game/DyingLight2StayHuman.png'),href:('gameDetails.html?15')}
+                ],
+            }
+        },
+        methods:{
+        },
+        mounted: function(){
+        },
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,290 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+a{
+    text-decoration: none;
+    color: #333333;
+}
+/*全部游戏*/
+.all_game_title{
+    width: 100%;
+    height: 8%;
+    background: -webkit-linear-gradient(left top, goldenrod , #b3d8ff);
+    opacity: 0.4;
+    text-align: center;
+    line-height: 50px;
+    letter-spacing: 10px;
+    position: absolute;
+}
+.all_game_choose{
+    width: 100%;
+    height: 40px;
+    background-color: white;
+    position: absolute;
+    top: 8%;
+}
+.all_game_desc{
+    width: 100%;
+    height: 85%;
+    position: absolute;
+    top: 15%;
+}
+.all_game_body{
+    height: 180px;
+    background-color: white;
+    margin-bottom: 20px;
+    margin-left: 25px;
+    margin-right: 25px;
+    border-radius: 10px;
+    opacity: 0.9;
+}
+.el-card__body{
+    padding: 0;
+}
+.all_game_top{
+    width: 100%;
+    height: 100px;
+}
+.all_game_top_img{
+    width: 100%;
+    height: 100%;
+}
+.all_game_bottom{
+    width: 100%;
+    height: 80px;
+
+}
+.all_game_bottom_showGame1_name{
+    font-weight: bold;
+    overflow :   hidden ;
+    text-overflow :   ellipsis ;
+    display :   -webkit-box ;
+    -webkit-line-clamp :   1 ;
+    -webkit-box-orient :   vertical ;
+}
+.all_game_bottom_showGame2_name{
+    font-weight: bold;
+    overflow :   hidden ;
+    text-overflow :   ellipsis ;
+    display :   -webkit-box ;
+    -webkit-line-clamp :   2 ;
+    -webkit-box-orient :   vertical ;
+}
+
+/*攻略*/
+.strategy_statistics,.comment_statistics,.user_statistics{
+    width: 90%;
+    height: 10%;
+    position: absolute;
+    left: 5%;
+    line-height: 60px;
+}
+.strategy_statistics_desc,.comment_statistics_desc,.user_statistics_desc{
+    margin-left: 50px;
+    margin-right: 5px;
+}
+.strategy_content,.comment_content,.user_content{
+    width: 100%;
+    height: 90%;
+    position: absolute;
+    top: 10%;
+}
+.el-table .success-row {
+    background: #f0f9eb;
+}
+.new_game_left{
+    width: 80%;
+    height: 100%;
+    position: absolute;
+}
+.new_game_right{
+    width: 20%;
+    height: 100%;
+    position: absolute;
+    left: 80%;
+}
+.new_game_left_card{
+    width: 96%;
+    height: 96%;
+    position: relative;
+    top: 2%;
+    left: 2%;
+}
+
+
+
+
+
+.new_game_right_card{
+    width: 90%;
+    height: 90%;
+    position: relative;
+    top: 5%;
+    left: 5%;
+}
+.new_game_right_title{
+    text-align: center;
+    font-weight: bold;
+    font-size: 25px;
+    padding-top: 10px;
+}
+.new_game_right_content{
+    width: 90%;
+    height: 80%;
+    position: relative;
+    left: 5%;
+}
+.new_game_right_list{
+    margin-bottom: 20px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*自定义销量图标*/
+.el-icon-sales{
+    background: url("../../img/icon/sales.png") no-repeat;
+    background-size: 15px;
+}
+.el-icon-sales:before{
+    content: "\66ff";
+    font-size: 15px;
+    visibility: hidden;
+}
+/*自定义点赞图标*/
+.el-icon-thumbs{
+    background: url("../../img/icon/thumbs.png") no-repeat;
+    background-size: 14px;
+}
+.el-icon-thumbs:before{
+    content: "\66ff";
+    font-size: 14px;
+    visibility: hidden;
+}
+/*自定义金钱图标*/
+.el-icon-moneys{
+    background: url("../../img/icon/moneys.png") no-repeat;
+    background-size: 12px;
+}
+.el-icon-moneys:before{
+    content: "\66ff";
+    font-size: 12px;
+    visibility: hidden;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*自定义金钱图标*/
+.el-icon-moneys{
+    background: url("../../img/icon/moneys.png") no-repeat;
+    background-size: 15px;
+}
+.el-icon-moneys:before{
+    content: "\66ff";
+    font-size: 15px;
+    visibility: hidden;
+}

@@ -1,0 +1,269 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+a{
+    text-decoration: none;
+    color: #333333;
+}
+/*首页game页面的页头header样式*/
+.elCol{
+    position: fixed;
+    z-index: 1;
+    height: 80px;
+    background-color: #333333;
+    padding: 10px;
+    float: left;
+}
+/*网站logo*/
+.homepage_logo{
+    position: relative;
+    left: 3%;
+}
+/*首页*/
+.homepage{
+    color: white;
+    position: relative;
+    bottom: 8px;
+    left: 9%;
+}
+/*全部游戏*/
+.all_game{
+    color: whitesmoke;
+    position: relative;
+    bottom: 8px;
+    left: 10%;
+    height: 20px;
+}
+
+/*全部游戏:隐藏类型*/
+.all_game_type{
+    z-index: 1;
+    list-style:none;
+    float: left;
+    position: relative;
+    left: 5%;
+    background-color: #999999;
+    border-radius: 4px;
+    color: whitesmoke;
+}
+li{
+    margin: 15px;
+    position: relative;
+    right: 3px;
+}
+li a{
+    text-decoration: none;
+    color: whitesmoke;
+}
+li a:hover{
+    position: relative;
+    left: 5px;
+}
+/*游戏更新列表*/
+.update_list{
+    color: whitesmoke;
+    position: relative;
+    bottom: 8px;
+    left: 11%;
+    height: 20px;
+}
+.update_list_a{
+    text-decoration: none;
+}
+/*资讯*/
+.notice{
+    color: whitesmoke;
+    position: relative;
+    bottom: 8px;
+    left: 13%;
+}
+/*攻略及其它*/
+.strategy{
+    color: whitesmoke;
+    position: relative;
+    bottom: 8px;
+    left: 14%;
+    height: 20px;
+}
+/*游戏攻略及其它的隐藏列表*/
+.strategy_list{
+    z-index: 1;
+    list-style:none;
+    float: left;
+    position: relative;
+    left: 20%;
+    width: 100px;
+    background-color: #999999;
+    border-radius: 4px;
+    color: whitesmoke;
+}
+.strategy_a{
+    text-decoration: none;
+}
+.strategy_list_a{
+    color: whitesmoke;
+}
+/*头部搜索*/
+/*上层*/
+.search_top{
+    width: 100%;
+    height: 50px;
+}
+/*头部弹窗搜索*/
+.header_search_form_input{
+    width: 80%;
+}
+
+/*搜索、公告、夜间模式、个人、退出*/
+.search,.bell,.moon,.personal,.quit{
+    width: 30px;
+    height: 30px;
+    background-color: #999999;
+    position: relative;
+    bottom: 13px;
+    left: 50%;
+    border-radius: 50%;
+}
+.search_header,.bell_header,.moon_header,.personal_header{
+    font-size: 20px;
+    position: relative;
+    left: 5px;
+    top: 5px;
+}
+.quit_header{
+    font-size: 20px;
+    position: relative;
+    left: 7px;
+    top: 5px;
+}
+/*公告弹窗标题背景色*/
+.notice_bell .el-dialog__header  {
+     background-color: green;
+ }
+/*公告弹窗body背景色*/
+.notice_bell .el-dialog__body  {
+    background-color: mediumseagreen;
+}
+/*自定义退出图标*/
+.el-icon-quit{
+    background: url("../../img/icon/quit.png") center no-repeat;
+    background-size: 20px;
+    /*background-size: contain;*/
+}
+/*content中是中文的Unicode编码； font-size:图标大小； visibility: hidden;来隐藏文字*/
+.el-icon-quit:before{
+    content: "\66ff";
+    font-size: 20px;
+    visibility: hidden;
+}
+
+/*深浅模式*/
+.transition-box {
+    position: relative;
+    top: 10px;
+    right: 5px;
+    text-align: center;
+    color: #333333;
+}
+/*个人信息*/
+.personal_information{
+    width: 150px;
+    height: 120px;
+    background-color: #999999;
+    position: relative;
+    top: 10px;
+    right: 60px;
+    border-radius: 20px
+}
+/*vip及用户名*/
+.personal_top{
+    width: 100%;
+    height: 20px;
+    text-align: center;
+    padding-top: 5px;
+    opacity: 0.8;
+}
+.money{
+    text-align: center;
+    padding-top: 10px;
+    opacity: 0.6;
+}
+.personals{
+    position: relative;
+    top: 15px;
+}
+.personals:hover,.quits:hover{
+    background-color: #F2F8FE;
+}
+.quits{
+    position: relative;
+    top: 20px;
+}
+
+.el-dialog__header{
+    background-color: #999999;
+}
+.el-dialog__body{
+    background-color: #999999;
+}
+.search_top_i{
+    color: whitesmoke;
+}
+.search_bottom button{
+    background-color: #999999;
+}
+.search_bottom button a{
+    color: whitesmoke;
+}
+
+
+
+/*自定义VIP图标*/
+.el-icon-vip{
+    background: url("../../img/icon/vip.png") center no-repeat;
+    background-size: 20px;
+    /*background-size: contain;*/
+}
+/*content中是中文的Unicode编码； font-size:图标大小； visibility: hidden;来隐藏文字*/
+.el-icon-vip:before{
+    content: "\66ff";
+    font-size: 20px;
+    visibility: hidden;
+}
+/*自定义非VIP图标*/
+.el-icon-unvip{
+    background: url("../../img/icon/unVIP.png") center no-repeat;
+    background-size: 20px;
+    /*background-size: contain;*/
+}
+/*content中是中文的Unicode编码； font-size:图标大小； visibility: hidden;来隐藏文字*/
+.el-icon-unvip:before{
+    content: "\66ff";
+    font-size: 20px;
+    visibility: hidden;
+}
+/*自定义退出图标2*/
+.el-icon-quit_two{
+    background: url("../../img/icon/quit2.png") center no-repeat;
+    background-size: 16px;
+    /*background-size: contain;*/
+}
+/*content中是中文的Unicode编码； font-size:图标大小； visibility: hidden;来隐藏文字*/
+.el-icon-quit_two:before{
+    content: "\66ff";
+    font-size: 16px;
+    visibility: hidden;
+}
+/*自定义金额图标*/
+.el-icon-moneys2{
+    background: url("../../img/icon/moneys.png") center no-repeat;
+    background-size: 20px;
+    /*background-size: contain;*/
+}
+/*content中是中文的Unicode编码； font-size:图标大小； visibility: hidden;来隐藏文字*/
+.el-icon-moneys2:before{
+    content: "\66ff";
+    font-size: 20px;
+    visibility: hidden;
+}

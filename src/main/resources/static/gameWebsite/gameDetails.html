@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="../js/common/vue.js"></script>
+    <script src="../js/common/axios.js"></script>
+    <script src="../element-ui/index.js"></script>
+    <link rel="stylesheet" href="../element-ui/theme-chalk/index.css">
+    <link rel="stylesheet" href="../css/type/game_all_type_header.css">
+    <link rel="stylesheet" href="../css/type/game_details_main.css">
+    <link rel="stylesheet" href="../css/type/game_all_type_footer.css">
+</head>
+<body>
+<div id="app" @mousewheel="showHeaderWheel">
+    <!--页面标题-->
+    <div v-title :title='1'></div>
+    <header class="header">
+        <el-row v-show="showHeader">
+            <el-col :span="24" class="elCol">
+                <!--网站logo-->
+                <div class="homepage_logo" style="display: inline-block">
+                    <img src="../img/homepage_logo.png" style="width: 70px;height: 50px">
+                </div>
+                <!--首页-->
+                <div class="homepage" style="display: inline-block">
+                    <a href="game.html">
+                        <div class="homepage">
+                            <i class="el-icon-house"><span style="font-weight: bold">首页</span></i>
+                        </div>
+                    </a>
+                </div>
+                <!--个人空间-->
+                <div class="personal_space" style="display: inline-block;">
+                    <a href="personal.html">
+                        <div class="personal_space">
+                            <i class="el-icon-user"><span style="font-weight: bold">个人空间</span></i>
+                        </div>
+                    </a>
+                </div>
+                <!--游戏更新列表-->
+                <div class="update_list" style="display: inline-block">
+                    <a class="update_list_a" href="gameUpdateList.html">
+                        <div class="update_list" style="font-weight: bold">
+                            游戏更新列表
+                        </div>
+                    </a>
+                </div>
+                <!--资讯-->
+                <div class="notice" style="display: inline-block">
+                    <a href="notice.html">
+                        <div class="notice">
+                            <i class="el-icon-document-copy"><span style="font-weight: bold">资讯</span></i>
+                        </div>
+                    </a>
+                </div>
+                <!--游戏攻略及其它-->
+                <div class="strategy" style="display: inline-block">
+                    <a class="strategy_a" href="strategy.html">
+                        <div class="strategy" style="font-weight: bold">
+                            游戏攻略及其它
+                        </div>
+                    </a>
+                </div>
+            </el-col>
+        </el-row>
+    </header>
+    <main class="main">
+        <el-row style="padding-top: 35px">
+            <!--左侧-->
+            <el-col :span="16" :offset="1">
+                <div class="left_main">
+                    <!--位置头-->
+                    <div class="left_position_main">
+                        <el-breadcrumb separator-class="el-icon-arrow-right" style="line-height: 50px">
+                            <el-breadcrumb-item><a href="game.html">首页</a></el-breadcrumb-item>
+                            <el-breadcrumb-item><a href="allGames.html">全部游戏</a></el-breadcrumb-item>
+                            <el-breadcrumb-item><a v-bind:href="'gameType.html?'+typeUrl">{{gameType}}</a></el-breadcrumb-item>
+                            <el-breadcrumb-item>游戏详情</el-breadcrumb-item>
+                        </el-breadcrumb>
+                    </div><hr style="width: 94%;position: relative;left: 3%;opacity: 0.3"/>
+                    <!--游戏名-->
+                    <div class="left_game_name_main">{{gameName}}</div>
+                    <!--游戏类型，更新时间，点赞数，价格-->
+                    <div class="left_type_time_likes_price_main">
+                        <!--游戏类型-->
+                        <span>
+                            <i class="el-icon-info">{{gameType}}</i>
+                        </span>
+                        <!--更新时间-->
+                        <span style="margin-left: 20px">
+                            <i class="el-icon-time">{{gameTime}}</i>
+                        </span>
+                        <!--点赞数-->
+                        <span style="margin-left: 20px">
+                            <i class="el-icon-thumbs">{{gameLikes}}</i>
+                        </span>
+                        <!--价格-->
+                        <span style="margin-left: 20px">
+                            <i class="el-icon-moneys">{{gamePrice}}</i>
+                        </span>
+                    </div>
+                    <!--版本介绍-->
+                    <div class="left_edition_main">
+                        <div class="left_edition_title_main">
+                            <i class="el-icon-edition left_edition_title_i_main">版本介绍：</i>
+                        </div>
+                        <div class="left_edition_desc_main">{{gameEdition}}</div>
+                    </div>
+                    <!--游戏介绍-->
+                    <div class="left_introduce_main">
+                        <div class="left_introduce_title_main">
+                            <i class="el-icon-introduce left_introduce_title_i_main">游戏介绍：</i>
+                        </div>
+                        <div class="left_introduce_desc_main">{{gameIntroduce}}</div>
+                    </div>
+                    <!--配置要求-->
+                    <div class="left_config_main">
+                        <div class="left_config_title_main">
+                            <i class="el-icon-config left_config_title_i_main">配置要求：</i>
+                        </div>
+                        <div class="left_config_desc_main">
+                            <ul>
+                                <li>操作系统：{{gameConfigFirst}}</li>
+                                <li>处理器：{{gameConfigSecond}}</li>
+                                <li>显卡：{{gameConfigThird}}</li>
+                                <li>内存：{{gameConfigFourth}}</li>
+                                <li>存储空间：{{gameConfigFifth}}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!--游戏截图-->
+                    <div class="left_screenshot_main">
+                        <div class="left_screenshot_title_main">
+                            <i class="el-icon-screenshot left_screenshot_title_i_main">游戏截图：</i>
+                        </div>
+                        <div class="left_screenshot_desc_main">
+                            <img style="width: 900px;height: 500px;" v-bind:src="gameScreenshotFirst">
+                            <img style="width: 900px;height: 500px;" v-bind:src="gameScreenshotSecond">
+                            <img style="width: 900px;height: 500px;" v-bind:src="gameScreenshotThird">
+                        </div>
+                    </div>
+                </div>
+            </el-col>
+            <!--右侧-->
+            <el-col :span="6" :offset="1" style="position: relative;right: 40px;">
+                <!--购买游戏-->
+                <div class="buy_main">
+                    <!--标题-->
+                    <div class="buy_title_main">
+                        <i class="el-icon-buy" style="font-weight: bold;">购买入库</i>
+                    </div><hr style="width: 90%;position: relative;left: 5%;opacity: 0.3"/>
+                    <!--销量-->
+                    <div class="buy_sales_main">
+                        <i class="el-icon-sales"> 游戏销量： <span style="color: blue;">{{gameSales}}</span></i>
+                    </div>
+                    <!--游戏价格-->
+                    <div class="buy_price_main">
+                        <i class="el-icon-moneys"> 游戏售价： <span style="color: green">{{gamePrice}}</span></i>
+                    </div>
+                    <!--购买-->
+                    <div class="buy_b_main">
+                        <span>不差钱，立即拿下 <i class="el-icon-right" style="margin-left: 50px"></i>
+                            <el-button type="text" @click="buyGame" :disabled="disabledBuyGame">购买</el-button>
+                            <i class="el-icon-back"></i>
+                        </span>
+                    </div>
+                    <!--点赞-->
+                    <div class="buy_l_main">
+                        <span>游戏不错，点赞收藏
+                            <i class="el-icon-right" style="margin-left: 40px"></i>
+                            <i v-show="thumbs" class="el-icon-thumbs" style="background-size: 20px;font-size: 20px" @click="thumbsUp"></i>
+                            <i v-show="thumbs2" class="el-icon-thumbs2" style="background-size: 20px;font-size: 20px" @click="thumbsDown"></i>
+                            <i class="el-icon-back"></i></span>
+                    </div>
+                </div>
+                <!--评论区-->
+                <div class="comment_main">
+                    <!--标题-->
+                    <div class="comment_title_main">
+                        <i class="el-icon-comment" style="font-weight: bold;">评论区</i>
+                    </div><hr style="width: 90%;position: relative;left: 5%;opacity: 0.3"/>
+                    <!--评论内容-->
+                    <div class="comment_content_main">
+                        <!--没有评论时-->
+                        <div v-show="noResult">
+                            <el-empty style="height: 307px;line-height: 0" description="还没有一条评论，赶紧抢先评论"></el-empty>
+                        </div>
+
+                        <!--评论(单体)-->
+                        <el-row v-show="result">
+                            <el-col :span="22" :offset="1" class="comment_content_individual_main" v-for="item in gameCommentList.slice((currentPage-1)*pageSize,currentPage*pageSize)">
+                                <div style="margin-top: 10px">
+                                    <!--评论人-->
+                                    <div class="comment_content_human_main">
+                                        <span><i class="el-icon-user"></i>{{item.userName}}&nbsp;<i class="el-icon-vip" v-if="item.userIdentity == 0?true:false"></i></span>
+                                        <span class="comment_content_time_main"><i class="el-icon-time"></i>{{item.commentTime}}</span>
+                                    </div>
+                                    <!--评论内容-->
+                                    <div class="comment_content_desc_main">
+                                        {{item.commentDesc}}
+                                    </div><hr style="opacity: 0.5"/>
+                                </div>
+                            </el-col>
+                        </el-row>
+                        <el-pagination
+                                style="text-align: center"
+                                small
+                                :hide-on-single-page="true"
+                                @current-change="handleCurrentChange"
+                                :current-page="currentPage"
+                                :page-size="pageSize"
+                                :total="gameCommentList.length"
+                                layout="prev, pager, next">
+                        </el-pagination>
+                    </div>
+                    <!--发表评论-->
+                    <div class="comment_report_main">
+                        <el-input
+                                class="comment_report_input_main"
+                                type="textarea"
+                                :rows="2"
+                                maxlength="30"
+                                placeholder="输入评论内容，字数不超过30"
+                                v-model="textarea">
+                        </el-input>
+                        <el-button class="comment_report_button_main" type="primary" @click="sendComments">发送评论</el-button>
+                    </div>
+
+                </div>
+                <!--其他链接-->
+                <div class="other_main">
+                    <!--标题-->
+                    <div class="other_title_main">
+                        <i class="el-icon-links" style="position: relative;top: 8px"></i><span style="font-weight: bold;">游戏链接</span>
+                    </div><hr style="width: 90%;position: relative;left: 5%;opacity: 0.3"/>
+                    <!--主体-->
+                    <div class="other_desc_main">
+                        <el-link class="el_link" :underline="false" href="gameType.html?休闲游戏">休闲游戏</el-link><br/>
+                        <el-link class="el_link" :underline="false" href="gameType.html?即时战略">即时战略</el-link><br/>
+                        <el-link class="el_link" :underline="false" href="gameType.html?射击游戏">射击游戏</el-link><br/>
+                        <el-link class="el_link" :underline="false" href="gameType.html?恐怖惊悚">恐怖惊悚</el-link><br/>
+                        <el-link class="el_link" :underline="false" href="gameType.html?格斗游戏">格斗游戏</el-link><br/>
+                        <el-link class="el_link" :underline="false" href="gameType.html?模拟经营">模拟经营</el-link><br/>
+                        <el-link class="el_link" :underline="false" href="gameType.html?生存类型">生存类型</el-link><br/>
+                        <el-link class="el_link" :underline="false" href="gameType.html?竞速体育">竞速体育</el-link><br/>
+                        <el-link class="el_link" :underline="false" href="gameType.html?角色扮演">角色扮演</el-link><hr style="margin-bottom: 10px;opacity: 0.5"/>
+                        <el-link class="el_link" :underline="false" href="allGames.html">热门游戏</el-link><br/>
+                        <el-link class="el_link" :underline="false" href="allGames.html">推荐游戏</el-link><br/>
+                    </div>
+                </div>
+            </el-col>
+        </el-row>
+    </main>
+    <footer class="footer">
+        <!--logo-->
+        <div class="logo_footer">
+            <img class="logo_footer_img" src="../img/homepage_logo.png">
+            <div class="logo_footer_words">懂哥游戏，懂得都懂</div>
+        </div>
+        <!--声明协议-->
+        <div class="agreement_footer">
+            <b><i class="el-icon-tickets"></i>协议</b>
+            <el-row class="agreement_footer_row">
+                <el-button size="mini" class="dark"><a href="rules/userAgreement.html">用户协议</a></el-button><br/>
+                <el-button size="mini" class="dark"><a href="rules/privacyPolicy.html">隐私政策</a></el-button>
+            </el-row>
+        </div>
+        <!--赞助商-->
+        <div class="sponsor_footer">
+            <b><i class="el-icon-user-solid"></i>合作伙伴</b>&nbsp;<a style="color: #999999;" href="cooperativePartner.html">详情</a>
+            <div style="color:#606266;">开发者本人非常乐意志同道合的小伙伴能加入其中</div>
+            <div style="color:#606266;">有意愿者可添加QQ:2456867076</div>
+        </div>
+        <!--结语-->
+        <div class="last_footer">
+            本站所有资源来源于互联网！若侵犯到您的权益，请联系站长2456867076@qq.com，我们将及时处理。
+        </div>
+
+    </footer>
+    <!--返回顶部-->
+    <el-backtop style="right: 0" @click="rocketShowHeader">
+        <i class="el-icon-rocket"></i>
+    </el-backtop>
+    <!--刷新-->
+    <span
+            type="primary"
+            @click="openFullScreen">
+    </span>
+</div>
+<script>
+    /*游戏id*/
+    var url = location.search;
+    var str = url.substr(1);
+    var app = new Vue({
+        el:"#app",
+        data(){
+            return{
+                /*滚动前，滚动条距文档顶部的距离*/
+                oldScrollTop : 0,
+                /*头部的展示与隐藏*/
+                showHeader: true,
+                /*游戏类型路径*/
+                typeUrl:'',
+                /*游戏类型*/
+                gameType:'',
+                /*游戏名*/
+                gameName:'',
+                /*更新时间*/
+                gameTime:'',
+                /*点赞数*/
+                gameLikes:'',
+                /*价格*/
+                gamePrice:'',
+                /*版本介绍*/
+                gameEdition:'',
+                /*游戏介绍*/
+                gameIntroduce:'',
+                /*配置要求*/
+                gameConfigFirst:'',
+                gameConfigSecond:'',
+                gameConfigThird:'',
+                gameConfigFourth:'',
+                gameConfigFifth:'',
+                /*游戏截图*/
+                gameScreenshotFirst:'',
+                gameScreenshotSecond:'',
+                gameScreenshotThird:'',
+                /*游戏销量*/
+                gameSales:'',
+                /*禁止重复购买*/
+                disabledBuyGame: false,
+                /*点赞图标*/
+                thumbs: true,
+                thumbs2: false,
+                /*游戏评论*/
+                gameCommentList:[],
+                isVIP: false,
+                currentPage: 1, //第一页
+                pageSize: 7,  //每页个数
+                noResult:true,
+                result:false,
+                /*评论内容*/
+                textarea:'',
+            }
+        },
+        methods:{
+            /*头部的隐藏与展示*/
+            showHeaderWheel(){
+                // 滚动条距文档顶部的距离
+                let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+                // 滚动条滚动的距离
+                let scrollStep = scrollTop - this.oldScrollTop;
+                // 更新——滚动前，滚动条距文档顶部的距离
+                this.oldScrollTop = scrollTop;
+                if (this.oldScrollTop == 0 && scrollStep == 0){
+                    this.showHeader = true;
+                }
+                if (scrollStep < 0) {
+                    this.showHeader = true;
+                } else if( scrollStep > 0){
+                    this.showHeader = false;
+                } else if(this.oldScrollTop == 0 && scrollStep == 0){
+                    this.showHeader = true;
+                } else if (this.oldScrollTop > 0 && scrollStep == 0){
+                    this.showHeader = false;
+                }
+            },
+            /*点击火箭展示头部*/
+            rocketShowHeader(){
+                this.showHeader = true;
+            },
+            /*刷新*/
+            openFullScreen() {
+                const loading = this.$loading({
+                    lock: true,
+                    text: '信息加载中',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(255, 255, 255, 0.7)'
+                });
+                setTimeout(() => {
+                    loading.close();
+                    this.$message.info("加载完毕")
+                }, 500);
+            },
+            /*游戏详细信息*/
+            gameDetails(){
+                axios.get("/game/details/"+str).then((res)=>{
+                    document.title = res.data.data.name;
+                    this.typeUrl = res.data.data.type;
+                    this.gameType = res.data.data.type;
+                    this.gameName = res.data.data.name;
+                    this.gameTime = res.data.data.createTime;
+                    this.gameLikes = res.data.data.likes;
+                    this.gamePrice = res.data.data.price;
+                    this.gameEdition = res.data.data.edition;
+                    this.gameIntroduce = res.data.data.introduce;
+                    this.gameConfigFirst = res.data.data.configFirst;
+                    this.gameConfigSecond = res.data.data.configSecond;
+                    this.gameConfigThird = res.data.data.configThird;
+                    this.gameConfigFourth = res.data.data.configFourth;
+                    this.gameConfigFifth = res.data.data.configFifth;
+                    this.gameScreenshotFirst = res.data.data.screenshotFirst;
+                    this.gameScreenshotSecond = res.data.data.screenshotSecond;
+                    this.gameScreenshotThird = res.data.data.screenshotThird;
+                    this.gameSales = res.data.data.sales;
+                    console.log(res.data.data)
+                },function(err){
+                    alert('错误');
+                })
+            },
+            /*禁止重复购买*/
+            GameInStorehouse(){
+                axios.get("/storehouse/exist",{params:{userId:sessionStorage.getItem('userId'),gameId:str}}).then((res)=>{
+                    if (res.data.code == 200){
+                        this.disabledBuyGame = false;
+                    }else {
+                        this.disabledBuyGame = true;
+                    }
+                },function(err){
+                    alert('错误');
+                })
+            },
+            /*购买游戏*/
+            buyGame() {
+                this.$confirm('您确定要购买此游戏吗?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.buyGame2();
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消操作'
+                    });
+                });
+            },
+            /*购买游戏*/
+            buyGame2(){
+                axios.post("/storehouse/buy",{userId:sessionStorage.getItem('userId'),gameId:str}).then((res)=>{
+                    const loading = this.$loading({
+                        lock: true,
+                        text: '游戏购买中',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)'
+                    });
+                    setTimeout(() => {
+                        loading.close();
+                        if (res.data.code == 400){
+                            this.$message.error(res.data.msg);
+                            this.$notify({
+                                title: '购买失败',
+                                dangerouslyUseHTMLString: true,
+                                message: '<strong>您的余额不足,立即前往<a href="personal.html" style="color: blue;">充值</a></strong>'
+                            });
+                        }else {
+                            const loading = this.$loading({
+                                lock: true,
+                                text: '正在等待交易结果，请稍等',
+                                spinner: 'el-icon-loading',
+                                background: 'rgba(0, 0, 0, 0.8)'
+                            });
+                            setTimeout(() => {
+                                loading.close();
+                                this.$message.success(res.data.msg);
+                                this.disabledBuyGame = true;
+                                const h = this.$createElement;
+                                this.$notify({
+                                    title: '购买成功',
+                                    message: h('i', { style: 'color: teal'}, '交易已完成，可前往个人主页，进行查看，游戏愉快')
+                                });
+                                this.gameDetails();
+                            }, 1500);
+                        }
+                    }, 1000);
+                    console.log(res.data);
+                },function(err){
+                    alert('错误');
+                })
+            },
+            /*游戏是否被点赞*/
+            gameLike(){
+                axios.get("/likes/exist",{params:{userId:sessionStorage.getItem('userId'),gameId:str}}).then((res)=>{
+                    if (res.data.code == 200){
+                        this.thumbs2 = true;
+                        this.thumbs = false;
+                    }else {
+                        this.thumbs2 = false;
+                        this.thumbs = true;
+                    }
+                },function(err){
+                    alert('错误');
+                })
+            },
+            /*点赞*/
+            thumbsUp(){
+                axios.post("/likes/up",{userId:sessionStorage.getItem('userId'),gameId:str}).then((res)=>{
+                    if (res.data.code == 200){
+                        this.$message.success("点赞成功");
+                        this.gameDetails();
+                        this.thumbs2 = true;
+                        this.thumbs = false;
+                    }else {
+                        this.$message.error("系统出错");
+                        }
+                    console.log(res.data);
+                },function(err){
+                    alert('错误');
+                })
+            },
+            /*取消点赞*/
+            thumbsDown(){
+                axios.post("/likes/down",{userId:sessionStorage.getItem('userId'),gameId:str}).then((res)=>{
+                    if (res.data.code == 200){
+                        this.$message.info("取消点赞");
+                        this.gameDetails();
+                        this.thumbs = true;
+                        this.thumbs2 = false;
+                    }else {
+                        this.$message.error("系统出错");
+                    }
+                    console.log(res.data);
+                },function(err){
+                    alert('错误');
+                })
+            },
+            /*页数更新*/
+            handleCurrentChange(currentPage){
+                this.currentPage = currentPage;
+            },
+            /*查看评论*/
+            getComment(){
+                axios.get("/comment/game/"+str).then((res)=>{
+                    this.gameCommentList = res.data.data;
+                    if (res.data.data.length == 0){
+                        this.noResult = true;
+                        this.result = false;
+                    }else {
+                        this.noResult = false;
+                        this.result = true;
+                    }
+                },function(err){
+                    alert('错误');
+                })
+            },
+            /*发送评论*/
+            sendComments(){
+                if(this.textarea == "" || this.textarea == null){
+                    this.$message.error("输入不能为空");
+                }else {
+                    axios.post("/comment/send",{userId:sessionStorage.getItem('userId'),gameId:str,commentDesc:this.textarea}).then((res)=>{
+                        if (res.data.code == 200){
+                            this.$message.success("发表成功");
+                            this.getComment();
+                        }else {
+                            this.$message.error("发表失败");
+                        }
+                    },function(err){
+                        alert('错误');
+                    }).finally(()=>{
+                        this.textarea = ''
+                    })
+                }
+            },
+        },
+        /*页面加载完毕执行函数*/
+        mounted: function(){
+            this.getComment();
+            this.gameLike();
+            this.GameInStorehouse();
+            this.openFullScreen();
+            this.gameDetails();
+            // 监听页面滚动事件
+            window.addEventListener("scroll", this.scrolling);
+            /*当前登录的用户id*/
+            console.log(sessionStorage.getItem('userId'));
+        },
+        directives: {
+            title: {
+                inserted: function (title) {}
+            }
+        },
+    })
+</script>
+</body>
+</html>

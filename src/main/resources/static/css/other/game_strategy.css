@@ -1,0 +1,133 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+a{
+    text-decoration: none;
+    color: #333333;
+}
+body{
+    background-color: whitesmoke;
+}
+.title{
+    font-size: 25px;
+    font-weight: bold;
+    line-height: 100px;
+    color: #606266;
+    width: 100%;
+    height: 100px;
+}
+
+.search{
+    width: 500px;
+    height: 40px;
+    border-radius: 20px;
+    border: 1px solid red;
+}
+.search_left{
+    width: 10%;
+    height: 100%;
+    border-radius: 20px 0 0 20px;
+    float: left;
+}
+.search_left_i{
+    font-size: 30px;
+    position: relative;
+    top: 5px;
+    left: 10px;
+}
+.search_right{
+    float: right;
+    width: 90%;
+    height: 100%;
+    border-radius: 0 20px 20px 0;
+}
+.search_right_button{
+    border-radius: 4px 20px 20px 4px;
+    width: 18%;
+    height: 95%;
+}
+.question{
+    width: 350px;
+    height: 50px;
+    position: relative;
+    bottom: 50px;
+    left: 600px ;
+}
+.question_title{
+    opacity: 0.7;
+    font-size: 15px;
+    position: relative;
+    top: 30px;
+}
+.question_card{
+    width: 70px;
+    position: relative;
+    left: 230px;
+}
+.el-card__body {
+    padding: 0;
+}
+.table_title,.table_userName,.table_content{
+    position: relative;
+    left: 80px;
+}
+.demo-table-expand {
+    font-size: 0;
+}
+.demo-table-expand label {
+    width: 90px;
+    color: #99a9bf;
+}
+.demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
+}
+/*编辑*/
+.edit{
+    width: 60px;
+    height: 60px;
+    background-color: #d1dbe5;
+    border-radius: 30px;
+    position: fixed;
+    bottom: 30px;
+    right: 180px;
+    opacity: 0.7;
+}
+.edit_i{
+    font-size: 50px;
+    position: relative;
+    top: 5px;
+    left: 5px;
+    opacity: 0.7;
+}
+.edit:hover{
+    opacity: 1;
+    cursor: pointer;
+}
+
+.edit_introduce{
+    font-size: 10px;
+    opacity: 0.7;
+    position: relative;
+    top: 17px;
+}
+.footer{
+    width: 100%;
+    height: 20px;
+    position: relative;
+    top: 80px;
+}
+/*自定义火箭图标*/
+.el-icon-rocket{
+    background: url("../../img/icon/rocket.png") center no-repeat;
+    background-size: 40px;
+    /*background-size: contain;*/
+}
+/*content中是中文的Unicode编码； font-size:图标大小； visibility: hidden;来隐藏文字*/
+.el-icon-rocket:before{
+    content: "\66ff";
+    font-size: 40px;
+    visibility: hidden;
+}

@@ -1,0 +1,355 @@
+.main{
+    position: relative;
+    top: 80px;
+    background-color: whitesmoke;
+    padding-bottom: 30px;
+}
+/*左侧*/
+.left_main{
+    background-color: white;
+    border-radius: 10px;
+}
+/*位置头*/
+.left_position_main{
+    height: 50px;
+    border-radius: 10px 10px 0 0;
+    position: relative;
+    left: 3%;
+    width: 97%;
+}
+/*游戏名*/
+.left_game_name_main{
+    position: relative;
+    left: 3%;
+    width: 97%;
+    height: 50px;
+    line-height: 50px;
+    font-size: 25px;
+    font-weight: bold;
+    opacity: 0.8;
+}
+/*游戏类型，更新时间，点赞数，价格*/
+.left_type_time_likes_price_main{
+    position: relative;
+    left: 3%;
+    width: 97%;
+    height: 20px;
+    line-height: 20px;
+    opacity: 0.5;
+    font-size: 15px;
+}
+/*版本介绍*/
+.left_edition_main{
+    position: relative;
+    top: 20px;
+    left: 3%;
+    width: 94%;
+}
+.left_edition_title_i_main{
+    font-size: 30px;
+    font-weight: bold;
+    opacity: 0.8;
+}
+.left_edition_desc_main{
+    margin-top: 10px;
+    opacity: 0.7;
+}
+/*游戏介绍*/
+.left_introduce_main{
+    position: relative;
+    top: 40px;
+    left: 3%;
+    width: 94%;
+}
+.left_introduce_title_i_main{
+    font-size: 30px;
+    font-weight: bold;
+    opacity: 0.8;
+}
+.left_introduce_desc_main{
+    margin-top: 10px;
+    opacity: 0.7;
+}
+/*配置要求*/
+.left_config_main{
+    position: relative;
+    top: 60px;
+    left: 3%;
+    width: 94%;
+}
+.left_config_title_i_main{
+    font-size: 30px;
+    font-weight: bold;
+    opacity: 0.8;
+}
+.left_config_desc_main{
+    margin-top: 10px;
+    opacity: 0.7;
+    position: relative;
+    left: 30px;
+}
+/*游戏截图*/
+.left_screenshot_main{
+    position: relative;
+    top: 80px;
+    left: 3%;
+    width: 94%;
+}
+.left_screenshot_title_i_main{
+    font-size: 30px;
+    font-weight: bold;
+    opacity: 0.8;
+}
+.left_screenshot_desc_main{
+    margin-top: 10px;
+    height: 1600px;
+}
+
+/*右上*/
+.buy_main{
+    border-radius: 10px;
+    height: 190px;
+    background-color: white;
+}
+.buy_title_main{
+    text-align: center;
+    font-size: 25px;
+    opacity: 0.7;
+}
+.buy_sales_main,.buy_price_main{
+    padding-top: 10px;
+    position: relative;
+    left: 5%;
+    opacity: 0.7;
+}
+.buy_b_main,.buy_l_main{
+    width: 90%;
+    height: 25px;
+    padding-top: 15px;
+    position: relative;
+    left: 5%;
+    opacity: 0.5;
+}
+
+/*评论区*/
+.comment_main{
+    background-color: white;
+    position: relative;
+    top: 20px;
+    border-radius: 10px;
+    height: 650px;
+}
+.comment_title_main{
+    text-align: center;
+    font-size: 25px;
+    opacity: 0.7;
+}
+.comment_content_main{
+    width: 90%;
+    height: 500px;
+    border: 1px solid #d1dbe5;
+    position: relative;
+    left: 5%;
+    margin-top: 10px;
+    border-radius: 10px;
+}
+/*评论时间*/
+.comment_content_time_main{
+    font-size: 10px;
+    line-height: 20px;
+    float: right;
+}
+/*评论内容*/
+.comment_content_desc_main{
+    word-break: break-all;
+    opacity: 0.6;
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+}
+/*发表评论*/
+.comment_report_main{
+    width: 90%;
+    height: 150px;
+    margin-top: 10px;
+    position: relative;
+    left: 5%;
+}
+.comment_report_input_main{
+    width: 68%;
+    float: left;
+}
+.comment_report_button_main{
+    width: 28%;
+    float: right;
+}
+
+/*其他链接*/
+.other_main{
+    background-color: white;
+    position: relative;
+    top: 40px;
+    border-radius: 10px;
+    height: 500px;
+}
+.other_title_main{
+    text-align: center;
+    font-size: 25px;
+    opacity: 0.7;
+}
+.other_desc_main{
+    width: 84%;
+    height: 200px;
+    position: relative;
+    left: 8%;
+    margin-top: 20px;
+}
+.el_link{
+    font-size: 20px;
+    padding-bottom: 10px;
+}
+
+/*自定义链接图标*/
+.el-icon-links{
+    background: url("../../img/icon/links.png") no-repeat;
+    background-size: 30px;
+    font-size: 30px;
+    /*background-size: contain;*/
+}
+/*content中是中文的Unicode编码； font-size:图标大小； visibility: hidden;来隐藏文字*/
+.el-icon-links:before{
+    content: "\66ff";
+    /*font-size: 15px;*/
+    visibility: hidden;
+}
+/*自定义VIP图标*/
+.el-icon-vip{
+    background: url("../../img/icon/vip.png") no-repeat;
+    background-size: 20px;
+    font-size: 20px;
+    /*background-size: contain;*/
+}
+/*content中是中文的Unicode编码； font-size:图标大小； visibility: hidden;来隐藏文字*/
+.el-icon-vip:before{
+    content: "\66ff";
+    /*font-size: 15px;*/
+    visibility: hidden;
+}
+/*自定义评论图标*/
+.el-icon-comment{
+    background: url("../../img/icon/comment.png") no-repeat;
+    background-size: 25px;
+    /*background-size: contain;*/
+}
+/*content中是中文的Unicode编码； font-size:图标大小； visibility: hidden;来隐藏文字*/
+.el-icon-comment:before{
+    content: "\66ff";
+    /*font-size: 15px;*/
+    visibility: hidden;
+}
+/*自定义购买图标*/
+.el-icon-buy{
+    background: url("../../img/icon/buy.png") no-repeat;
+    background-size: 25px;
+    /*background-size: contain;*/
+}
+/*content中是中文的Unicode编码； font-size:图标大小； visibility: hidden;来隐藏文字*/
+.el-icon-buy:before{
+    content: "\66ff";
+    /*font-size: 15px;*/
+    visibility: hidden;
+}
+/*自定义点赞2图标*/
+.el-icon-thumbs2{
+    background: url("../../img/icon/thumbs2.png") no-repeat;
+    background-size: 20px;
+    /*background-size: contain;*/
+}
+/*content中是中文的Unicode编码； font-size:图标大小； visibility: hidden;来隐藏文字*/
+.el-icon-thumbs2:before{
+    content: "\66ff";
+    /*font-size: 15px;*/
+    visibility: hidden;
+}
+/*自定义销量图标*/
+.el-icon-sales{
+    background: url("../../img/icon/sales.png") no-repeat;
+    background-size: 15px;
+    /*background-size: contain;*/
+}
+/*content中是中文的Unicode编码； font-size:图标大小； visibility: hidden;来隐藏文字*/
+.el-icon-sales:before{
+    content: "\66ff";
+    font-size: 15px;
+    visibility: hidden;
+}
+/*自定义金钱图标*/
+.el-icon-moneys{
+    background: url("../../img/icon/moneys.png") no-repeat;
+    background-size: 15px;
+    /*background-size: contain;*/
+}
+/*content中是中文的Unicode编码； font-size:图标大小； visibility: hidden;来隐藏文字*/
+.el-icon-moneys:before{
+    content: "\66ff";
+    font-size: 15px;
+    visibility: hidden;
+}
+/*自定义截图图标*/
+.el-icon-screenshot{
+    background: url("../../img/icon/screenshot.png") no-repeat;
+    background-size: 30px;
+    /*background-size: contain;*/
+}
+/*content中是中文的Unicode编码； font-size:图标大小； visibility: hidden;来隐藏文字*/
+.el-icon-screenshot:before{
+    content: "\66ff";
+    font-size: 30px;
+    visibility: hidden;
+}
+/*自定义要求图标*/
+.el-icon-config{
+    background: url("../../img/icon/config.png") no-repeat;
+    background-size: 30px;
+    /*background-size: contain;*/
+}
+/*content中是中文的Unicode编码； font-size:图标大小； visibility: hidden;来隐藏文字*/
+.el-icon-config:before{
+    content: "\66ff";
+    font-size: 30px;
+    visibility: hidden;
+}
+/*自定义介绍图标*/
+.el-icon-introduce{
+    background: url("../../img/icon/introduce.png") no-repeat;
+    background-size: 30px;
+    /*background-size: contain;*/
+}
+/*content中是中文的Unicode编码； font-size:图标大小； visibility: hidden;来隐藏文字*/
+.el-icon-introduce:before{
+    content: "\66ff";
+    font-size: 30px;
+    visibility: hidden;
+}
+/*自定义版本图标*/
+.el-icon-edition{
+    background: url("../../img/icon/edition.png") no-repeat;
+    background-size: 30px;
+    /*background-size: contain;*/
+}
+/*content中是中文的Unicode编码； font-size:图标大小； visibility: hidden;来隐藏文字*/
+.el-icon-edition:before{
+    content: "\66ff";
+    font-size: 30px;
+    visibility: hidden;
+}
+/*自定义点赞图标*/
+.el-icon-thumbs{
+    background: url("../../img/icon/thumbs.png") no-repeat;
+    background-size: 15px;
+    /*background-size: contain;*/
+}
+/*content中是中文的Unicode编码； font-size:图标大小； visibility: hidden;来隐藏文字*/
+.el-icon-thumbs:before{
+    content: "\66ff";
+    /*font-size: 15px;*/
+    visibility: hidden;
+}

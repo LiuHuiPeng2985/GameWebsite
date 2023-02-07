@@ -1,0 +1,69 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>游戏更新列表</title>
+    <script src="../js/common/vue.js"></script>
+    <script src="../js/common/axios.js"></script>
+    <script src="../element-ui/index.js"></script>
+    <link rel="stylesheet" href="../element-ui/theme-chalk/index.css">
+    <link rel="stylesheet" href="../css/other/game_update_list.css">
+</head>
+<body>
+<div id="app">
+    <el-row>
+        <!--标题-->
+        <el-col :span="22" :offset="1">
+            <div class="title">
+                更新记录<span style="font-size: 15px;padding-left: 30px;opacity: 0.5"><a href="game.html">>>> 返回 <<<</a></span>
+            </div>
+        </el-col>
+        <el-col :span="20" :offset="2">
+            <ul>
+                <li style="margin: 5px" v-for="item in gameUpdateList">
+                    <a v-bind:href="nameUrl" @click="nameJump(item.id)">{{item.name}}</a>
+                    <span>
+                        {{item.createTime}}
+                    </span>
+                </li>
+            </ul>
+        </el-col>
+    </el-row>
+    <!--返回顶部-->
+    <el-backtop style="right: 10px">
+        <i class="el-icon-rocket"></i>
+    </el-backtop>
+</div>
+<script>
+    var app = new Vue({
+        el:"#app",
+        data() {
+            return {
+                gameUpdateList:[],
+                /*游戏名跳转详细页*/
+                nameUrl:'',
+            }
+        },
+        methods:{
+            /*游戏更新列表*/
+            gameUpdate(){
+                axios.get("/game/update").then((res)=>{
+                    this.gameUpdateList = res.data.data;
+                },function(err){
+                    alert('失败');
+                })
+            },
+            /*通过游戏名跳转页面详情页*/
+            nameJump(id){
+                this.nameUrl = "gameDetails.html?"+id;
+            },
+        },
+        /*页面加载完毕执行函数*/
+        mounted: function(){
+            this.gameUpdate();
+        },
+    })
+</script>
+</body>
+</html>

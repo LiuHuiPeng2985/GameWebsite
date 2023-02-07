@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>合作伙伴</title>
+    <script src="../js/common/vue.js"></script>
+    <script src="../js/common/axios.js"></script>
+    <script src="../element-ui/index.js"></script>
+    <link rel="stylesheet" href="../element-ui/theme-chalk/index.css">
+    <link rel="stylesheet" href="../css/other/game_cooperative_partner.css">
+</head>
+<body>
+<div id="app">
+    <el-row>
+        <el-col :span="20" :offset="2">
+            <div class="title">
+                梦幻联动
+            </div><el-divider></el-divider>
+        </el-col>
+        <el-col :span="20" :offset="2">
+            <div class="game_main">
+                <!--上方摁扭-->
+                <div class="game_main_top">
+                    <el-button class="game_main_top_button" @click="showGame1 = !showGame1">默认按钮</el-button>
+                    <el-button class="game_main_top_button" @click="showGame2 = !showGame2">默认按钮</el-button>
+                    <el-button class="game_main_top_button" @click="showGame3 = !showGame3">默认按钮</el-button>
+                    <el-button class="game_main_top_button" @click="showGame4 = !showGame4">默认按钮</el-button>
+                    <el-button class="game_main_top_button" @click="showGame5 = !showGame5">默认按钮</el-button>
+                </div>
+                <!--下方游戏-->
+                <div class="game_main_bottom">
+                    <el-collapse-transition>
+                        <div v-show="showGame1" class="game_main_bottom_first">
+                            <a href="game.html">
+                                <el-image style="width: 100%;height: 320px;border-radius: 10px"></el-image>
+                            </a>
+<!--                            <el-rate-->
+<!--                                    style="text-align: center;"-->
+<!--                                    v-model="value"-->
+<!--                                    disabled-->
+<!--                                    score-template="{value}">-->
+<!--                            </el-rate>-->
+                        </div>
+                    </el-collapse-transition>
+                    <el-collapse-transition>
+                        <div v-show="showGame2" class="game_main_bottom_second">
+                            <a href="game.html">
+                                <el-image style="width: 100%;height: 320px;border-radius: 10px"></el-image>
+                            </a>
+<!--                            <el-rate-->
+<!--                                    style="text-align: center;"-->
+<!--                                    v-model="value"-->
+<!--                                    disabled-->
+<!--                                    score-template="{value}">-->
+<!--                            </el-rate>-->
+                        </div>
+                    </el-collapse-transition>
+                    <el-collapse-transition>
+                        <div v-show="showGame3" class="game_main_bottom_third">
+                            <a href="game.html">
+                                <el-image style="width: 100%;height: 320px;border-radius: 10px"></el-image>
+                            </a>
+<!--                            <el-rate-->
+<!--                                    style="text-align: center;"-->
+<!--                                    v-model="value"-->
+<!--                                    disabled-->
+<!--                                    score-template="{value}">-->
+<!--                            </el-rate>-->
+                        </div>
+                    </el-collapse-transition>
+                    <el-collapse-transition>
+                        <div v-show="showGame4" class="game_main_bottom_fourth">
+                            <a href="game.html">
+                                <el-image style="width: 100%;height: 320px;border-radius: 10px"></el-image>
+                            </a>
+<!--                            <el-rate-->
+<!--                                    style="text-align: center;"-->
+<!--                                    v-model="value"-->
+<!--                                    disabled-->
+<!--                                    score-template="{value}">-->
+<!--                            </el-rate>-->
+                        </div>
+                    </el-collapse-transition>
+                    <el-collapse-transition>
+                        <div v-show="showGame5" class="game_main_bottom_fifth">
+                            <a href="game.html">
+                                <el-image style="width: 100%;height: 320px;border-radius: 10px"></el-image>
+                            </a>
+<!--                            <el-rate-->
+<!--                                    style="text-align: center;"-->
+<!--                                    v-model="value"-->
+<!--                                    disabled-->
+<!--                                    score-template="{value}">-->
+<!--                            </el-rate>-->
+                        </div>
+                    </el-collapse-transition>
+                </div>
+                <!--下方-->
+                <div class="game_desc_bottom">
+                        <div class="game_desc_bottom_first">
+                            <img src="../img/icon/collections.png" style="width: 100%;height: 280px;border-radius: 10px">
+                        </div>
+                        <div class="game_desc_bottom_second">
+                            <img src="../img/icon/collections.png" style="width: 100%;height: 280px;border-radius: 10px">
+                        </div>
+                        <div class="game_desc_bottom_third">
+                            <img src="../img/icon/collections.png" style="width: 100%;height: 280px;border-radius: 10px">
+                        </div>
+                        <div class="game_desc_bottom_fourth">
+                            <img src="../img/icon/collections.png" style="width: 100%;height: 280px;border-radius: 10px">
+                        </div>
+                        <div class="game_desc_bottom_fifth">
+                            <img src="../img/icon/collections.png" style="width: 100%;height: 280px;border-radius: 10px">
+                        </div>
+                </div>
+            </div>
+        </el-col>
+    </el-row>
+    <el-divider></el-divider>
+    <!--其他-->
+    <div class="other_left">
+        <el-card shadow="always" style="height: 100%">
+            <!--左侧-->
+            <div class="other_left_title">
+                赞助商
+            </div>
+            <!--右侧-->
+            <div class="other_left_desc">
+                1.张同学 : 对本站提供了绘画支持
+
+            </div>
+        </el-card>
+    </div>
+    <div class="other_right">
+        >>> <a href="game.html">主页</a> <<<
+    </div>
+</div>
+<script>
+    var app = new Vue({
+        el:"#app",
+        data() {
+            return {
+                showGame1: false,
+                showGame2: false,
+                showGame3: false,
+                showGame4: false,
+                showGame5: false,
+                /*五星好评*/
+                // value: 5,
+
+
+
+
+            }
+        },
+        methods:{
+
+            showGame(){
+                this.showGame1 = !this.showGame1;
+                this.showGame2 = !this.showGame2;
+                this.showGame3 = !this.showGame3;
+                this.showGame4 = !this.showGame4;
+                this.showGame5 = !this.showGame5;
+            }
+
+
+
+        },
+        mounted: function(){
+
+            this.showGame();
+
+        },
+    })
+</script>
+</body>
+</html>

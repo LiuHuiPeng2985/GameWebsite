@@ -1,0 +1,295 @@
+.main{
+    position: relative;
+    top: 80px;
+    background-color: whitesmoke;
+    min-height: 550px;
+}
+/*返回主页*/
+.back_all_game_main{
+    height: 40px;
+}
+/*游戏类型间的跳转*/
+.game_type_jump_main{
+    height: 60px;
+}
+
+.choice_main{
+    width: 20%;
+    height: 100%;
+    float: left;
+}
+.type_main{
+    float: right;
+    width: 15%;
+    height: 100%;
+}
+
+
+
+
+
+
+
+
+/*游戏第一种展示方式*/
+/*主体*/
+.game_first_body{
+    width: 92%;
+    position: relative;
+    top: 10px;
+    left: 4%;
+}
+/*主体（单个）*/
+.game_first_body_goods{
+    height: 250px;
+    background-color: white;
+    margin-bottom: 30px;
+    margin-left: 21px;
+    margin-right: 25px;
+    border-radius: 10px;
+    opacity: 0.9;
+}
+.game_first_body_goods:hover{
+    position: relative;
+    bottom: 3px;
+    opacity: 1;
+    background-color: #F5F7FA;
+}
+/*图片*/
+.game_first_body_img,.game_first_img_media{
+    width: 100%;
+    height: 100%;
+    border-radius : 10px 10px 0 0;
+}
+/*内容*/
+.game_first_content{
+    width: 90%;
+    height: 90%;
+    position: relative;
+    top: 5%;
+    left: 5%;
+}
+.game_first_content_type{
+    opacity: 0.6;
+    font-size: 12px;
+}
+.game_first_content_name{
+    font-weight: bold;
+    word-break: break-all;
+
+    overflow :   hidden ;
+    text-overflow :   ellipsis ;
+    display :   -webkit-box ;
+    -webkit-line-clamp :   2 ;
+    -webkit-box-orient :   vertical ;
+}
+.game_first_content_edition{
+    width: 100%;
+    opacity: 0.7;
+    font-size: 12px;
+    position: relative;
+    top: 5px;
+}
+.game_first_content_edition_desc{
+/*    !*文字隐藏后添加省略号*!
+    text-overflow: ellipsis;
+    !*不允许换行*!
+    white-space:nowrap;
+    !*自动隐藏文字*!
+    overflow: hidden;*/
+
+    /*显示两行，多余则用省略号代替*/
+    overflow :   hidden ;
+    text-overflow :   ellipsis ;
+    display :   -webkit-box ;
+    -webkit-line-clamp :   2 ;
+    -webkit-box-orient :   vertical ;
+}
+.game_first_content_time{
+    float: left;
+    opacity: 0.7;
+    font-size: 12px;
+}
+.game_first_content_time_i{
+    float: left;
+    position: relative;
+    top: 10px;
+}
+.game_first_content_time_desc{
+    float: left;
+    position: relative;
+    top: 8px;
+}
+/*点赞*/
+.game_first_content_good{
+    opacity: 0.7;
+    font-size: 12px;
+}
+.game_first_content_good_i{
+    position: relative;
+    top: 25px;
+    right: 130px;
+}
+.game_first_content_good_desc{
+    position: relative;
+    top: 9px;
+    left: 15px;
+}
+/*价格*/
+.game_first_content_money{
+    opacity: 0.7;
+    font-size: 12px;
+}
+.game_first_content_money_i{
+    position: relative;
+    bottom: 8px;
+    left: 80px;
+}
+.game_first_content_money_desc{
+    position: relative;
+    bottom: 24px;
+    left: 95px;
+}
+
+
+/*游戏第二种展示方式*/
+/*主体*/
+.game_second_main_body{
+    width: 92%;
+    position: relative;
+    top: 10px;
+    left: 4%;
+}
+/*最新游戏主体（单个）*/
+.game_second_main_body_goods{
+    height: 100px;
+    background-color: white;
+    margin-bottom: 30px;
+    margin-left: 30px;
+    margin-right: 25px;
+    border-radius: 5px;
+    opacity: 0.9;
+}
+.game_second_main_body_goods:hover{
+    position: relative;
+    bottom: 3px;
+    opacity: 1;
+    background-color: #F5F7FA;
+}
+/*最新游戏照片*/
+.game_second_main_img{
+    width: 95%;
+    height: 80%;
+    margin: 10px;
+}
+.game_second_main_img_media{
+    width: 100%;
+    height: 100%;
+}
+/*最新游戏内容*/
+.game_second_main_content{
+    width: 95%;
+    height: 80%;
+    margin: 10px;
+}
+.game_second_main_content_type{
+    opacity: 0.6;
+    font-size: 12px;
+}
+.game_second_main_content_name{
+    font-weight: bold;
+}
+.game_second_main_content_edition{
+    width: 100%;
+    opacity: 0.7;
+    font-size: 12px;
+    position: relative;
+    top: 5px;
+
+}
+.game_second_main_content_edition_desc{
+    /*文字隐藏后添加省略号*/
+    text-overflow: ellipsis;
+    /*不允许换行*/
+    white-space:nowrap;
+    /*自动隐藏文字*/
+    overflow: hidden;
+    /*width: 20em;*/
+}
+/*更新时间*/
+.game_second_main_content_time{
+    float: left;
+    opacity: 0.7;
+    font-size: 12px;
+}
+.game_second_main_content_time_i{
+    float: left;
+    position: relative;
+    top: 10px;
+}
+.game_second_main_content_time_desc{
+    float: left;
+    position: relative;
+    top: 8px;
+}
+/*点赞*/
+.game_second_main_content_good{
+    float: left;
+    opacity: 0.7;
+    font-size: 12px;
+    position: relative;
+    left: 10px;
+}
+.game_second_main_content_good_i{
+    float: left;
+    position: relative;
+    top: 10px;
+}
+.game_second_main_content_good_desc{
+    float: left;
+    position: relative;
+    top: 8px;
+}
+/*自定义点赞图标*/
+.el-icon-thumbs{
+    background: url("../../img/icon/thumbs.png") center no-repeat;
+    background-size: 12px;
+    /*background-size: contain;*/
+}
+/*content中是中文的Unicode编码； font-size:图标大小； visibility: hidden;来隐藏文字*/
+.el-icon-thumbs:before{
+    content: "\66ff";
+    font-size: 12px;
+    visibility: hidden;
+}
+/*价格*/
+.game_second_main_content_money{
+    float: left;
+    opacity: 0.7;
+    font-size: 12px;
+    position: relative;
+    left: 30px;
+}
+.game_second_main_content_money_i{
+    float: left;
+    position: relative;
+    top: 10px;
+}
+.game_second_main_content_money_desc{
+    float: left;
+    position: relative;
+    top: 8px;
+}
+
+/*自定义金钱图标*/
+.el-icon-moneys{
+    background: url("../../img/icon/moneys.png") center no-repeat;
+    background-size: 12px;
+    /*background-size: contain;*/
+}
+/*content中是中文的Unicode编码； font-size:图标大小； visibility: hidden;来隐藏文字*/
+.el-icon-moneys:before{
+    content: "\66ff";
+    font-size: 12px;
+    visibility: hidden;
+}

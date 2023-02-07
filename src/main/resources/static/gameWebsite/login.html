@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <script src="../js/common/vue.js"></script>
+    <script src="../js/common/axios.js"></script>
+    <script src="../element-ui/index.js"></script>
+    <link rel="stylesheet" href="../element-ui/theme-chalk/index.css">
+    <link rel="stylesheet" href="../css/login/login.css">
+</head>
+<body>
+<div id="app">
+    <video style="object-fit: fill;z-index: -1;position: fixed;width: 100%;height: 100%" muted autoplay>
+        <source src="../img/bg-video.mp4">
+    </video>
+    <div class="header">
+        <div class="header_left">
+            <img src="../img/homepage_logo.png" style="width: 70px;height: 100%">
+            <div style="float: right;height: 100%;line-height: 55px;">
+                <b>GAME</b>
+            </div>
+        </div>
+        <div class="header_right">
+            <div style="height: 100%;line-height: 55px">
+                <div @click="showOpinion=true" style="cursor: pointer">意见反馈</div>
+            </div>
+        </div>
+    </div>
+    <div class="main">
+        <div class="main_welcome">
+            <p style="font-size: 50px">登录您的账户</p>
+        </div><br/>
+        <div class="main_title">
+            <p style="font-size: 25px">每一天，乐在游戏。</p>
+        </div><br/>
+        <!--登录-->
+        <div>
+            <el-form :model="loginForm" :rules="rules" ref="loginForm">
+                <!--账号-->
+                <el-form-item label="" prop="account">
+                    <el-input v-model="loginForm.account" type="text" placeholder="账号"></el-input>
+                </el-form-item>
+                <!--密码-->
+                <el-form-item label="" prop="password">
+                    <el-input v-model="loginForm.password" type="password" placeholder="密码"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button :disabled="notAgree" type="primary" @click="submitLoginForm('loginForm')">登录</el-button>
+                </el-form-item>
+            </el-form>
+        </div>
+        <el-checkbox v-model="checkedAgree" @change="agreeRules()"><div style="color: black">我已阅读并同意<a href="rules/userAgreement.html">用户协议</a>和<a href="rules/privacyPolicy.html">隐私政策</a></div></el-checkbox><br/><br/>
+<!--        <div>注册登录即表示接受<a href="rules/userAgreement.html">用户协议</a>和<a href="rules/privacyPolicy.html">隐私政策</a></div><br/>-->
+        <div><span class="no_account">还没有账号，现在注册?</span>&nbsp;<div class="register_new_user" @click="showRegister=true">注册新用户</div></div>
+    </div>
+    <div class="footer">
+        <p>Copyright © 2021-2022 LiuHuiPeng All Rights Reserved.</p>
+    </div>
+    <!--刷新-->
+    <span
+            type="primary"
+            @click="openFullScreen">
+    </span>
+    <!--注册新账户-->
+    <el-dialog class="register_user"  :visible.sync="showRegister" width="25%" center @close="resetForm">
+        <div slot="title">
+            <div><img class="register_img" src="../img/homepage_logo.png"></div>
+            <div class="register_desc">
+                <i class="el-icon-user-solid"></i>&nbsp;注册新账户<br/>
+                -----------------------------------------
+            </div>
+        </div>
+        <div>
+            <el-form :model="registerForm" :rules="rules2" label-width="50px" ref="registerForm" label-position="top" size="mini">
+                <!--用户名-->
+                <el-form-item label="用户名*" prop="name">
+                    <el-input v-model="registerForm.name" type="text" placeholder="请输入用户名(2-6位)"></el-input>
+                </el-form-item>
+                <!--账号-->
+                <el-form-item label="账号*" prop="account">
+                    <el-input v-model="registerForm.account" type="text" placeholder="请输入10位长度的账号"></el-input>
+                </el-form-item>
+                <!--密码-->
+                <el-form-item label="密码*" prop="password">
+                    <el-input v-model="registerForm.password" type="password" autocomplete="off" placeholder="请输入6-10位长度的密码"></el-input>
+                </el-form-item>
+                <!--确认密码-->
+                <el-form-item label="确认密码*" prop="checkPassword">
+                    <el-input v-model="registerForm.checkPassword" type="password" autocomplete="off" placeholder="请再一次确认密码"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="submitRegisterForm('registerForm')" style="width: 100%">注册</el-button>
+                </el-form-item>
+            </el-form>
+        </div>
+    </el-dialog>
+    <!--意见反馈弹窗-->
+    <el-dialog class="opinion"  :visible.sync="showOpinion" width="30%" center>
+        <div slot="title" style="color: black;font-size: 20px"><i class="el-icon-edit-outline"></i>&nbsp;意见反馈</div>
+        <div style="color: black;font-size: 15px">添加QQ：2456867076(荐)</div>
+        <div style="color: black;font-size: 15px">添加微信：15770561981</div>
+    </el-dialog>
+</div>
+<script>
+    var app = new Vue({
+        el:"#app",
+        data(){
+            /*确认密码*/
+            var validatePass = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入密码'));
+                } else {
+                    if (this.registerForm.checkPassword !== '') {
+                        this.$refs.registerForm.validateField('checkPassword');
+                    }
+                    callback();
+                }
+            };
+            var validatePass2 = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请再次输入密码'));
+                } else if (value !== this.registerForm.password) {
+                    callback(new Error('两次输入密码不一致!'));
+                } else {
+                    callback();
+                }
+            };
+            return{
+                showOpinion:false,
+                showRegister:false,
+                /*登录表单*/
+                loginForm: {},
+                /*注册表单*/
+                registerForm: {
+                    name: '',
+                    account: '',
+                    password: '',
+                    checkPassword: '',
+                },
+                /*登录验证*/
+                rules: {
+                    account: [
+                        { required: true, message: '请输入您的账号', trigger: 'blur' },
+                    ],
+                    password: [
+                        { required: true, message: '请输入您的密码', trigger: 'blur' },
+                    ],
+                },
+                /*注册验证*/
+                rules2: {
+                    name: [
+                        { required: true, message: '请输入您的用户名', trigger: 'blur' },
+                        { min: 2, max: 6, message: '长度在 2 到 6 个字符', trigger: 'blur' }
+                    ],
+                    account: [
+                        { required: true, message: '请输入您的账号', trigger: 'blur' },
+                        { min: 10, max: 10, message: '请设置10位数的账号', trigger: 'blur' }
+                    ],
+
+                    password: [
+                        { required: true, message: '请输入您的密码', trigger: 'blur' },
+                        { min: 6, max: 10, message: '请设置6-10位数的密码', trigger: 'blur' },
+                        { validator: validatePass, trigger: 'blur' }
+                    ],
+                    checkPassword: [
+                        { required: true, message: '请输入您的密码', trigger: 'blur' },
+                        { validator: validatePass2, trigger: 'blur' }
+                    ]
+                },
+                checkedAgree: false,
+                notAgree: true,
+            }
+        },
+        methods:{
+            /*重置表单*/
+            resetForm(){
+                this.$refs['registerForm'].resetFields();
+            },
+            /*登录*/
+            submitLoginForm(formName) {
+                /*输入不能为空*/
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        /*连接后端*/
+                        axios.post("/user/login",this.loginForm).then((res)=>{
+                            if(res.data.code != 200) {
+                                if (res.data.msg == '您的账户违反规定，已被封禁'){
+                                    axios.get("/user/account/"+this.loginForm.account).then((res)=>{
+                                        this.$message.error("您的账户违反规定，已被封禁至"+res.data.data.banTime);
+                                        console.log(res.data.data.banTime)
+                                    },function(err){
+                                        alert('错误');
+                                    })
+                                }else {
+                                    this.$message.error(res.data.msg);
+                                }
+                                console.log(res.data)
+                            }else {
+                                sessionStorage.setItem('userId',res.data.data.userId)
+                                if (res.data.data.isUser) {
+                                    const loading = this.$loading({
+                                        lock: true,
+                                        text: '正在登录，请稍候',
+                                        spinner: 'el-icon-loading',
+                                        background: 'rgba(0, 0, 0, 0.8)'
+                                    });
+                                    setTimeout(() => {
+                                        loading.close();
+                                        location.href = 'game.html';
+                                    }, 2000);
+                                } else {
+                                    const loading = this.$loading({
+                                        lock: true,
+                                        text: '正在登录，请稍候',
+                                        spinner: 'el-icon-loading',
+                                        background: 'rgba(0, 0, 0, 0.8)'
+                                    });
+                                    setTimeout(() => {
+                                        loading.close();
+                                        location.href = 'admin.html';
+                                    }, 2000);
+                                }
+                            }
+                        },function(err){
+                            alert('失败');
+                        })
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
+            },
+            /*注册*/
+            submitRegisterForm(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        /*连接后端*/
+                        axios.post("/user/register",this.registerForm).then((res)=>{
+                            if(res.data.code == 200) {
+                                this.$message.success(res.data.msg);
+                                this.showRegister = false;
+                            }else {
+                                this.$message.error(res.data.msg);
+                            }
+                        },function(err){
+                            alert('失败');
+                        })
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
+            },
+            openFullScreen() {
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)'
+                });
+                setTimeout(() => {
+                    loading.close();
+                }, 2000);
+            },
+
+            agreeRules(){
+                if (this.checkedAgree == true){
+                    this.notAgree = false;
+                }else {
+                    this.notAgree = true;
+                }
+            }
+        },
+    })
+</script>
+</body>
+</html>

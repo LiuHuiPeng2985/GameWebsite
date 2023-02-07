@@ -1,0 +1,171 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+a{
+    text-decoration: none;
+    color: #333333;
+}
+body{
+    background-color: whitesmoke;
+}
+.title{
+    font-size: 50px;
+    opacity: 0.7;
+    letter-spacing: 30px;
+    animation: change 5s linear 0s infinite;
+    font-weight: bold;
+    font-family: cursive;
+    text-align: center;
+}
+@keyframes change {
+    0% {color: red;}
+    25% {color: yellow;}
+    50% {color: blue;}
+    75% {color: green;}
+    100% {color: red;}
+}
+.game_main{
+    width: 100%;
+    height: 410px;
+    border-radius: 10px;
+}
+.game_main_top{
+    width: 100%;
+    height: 50px;
+}
+.game_main_top_button{
+    width: 19%;
+    margin-left: 0.2%;
+}
+.game_main_bottom{
+    margin-top: 10px;
+    z-index: 1;
+    width: 100%;
+    height: 350px;
+}
+.el-card__body {
+    padding: 0;
+    margin: 0;
+}
+.game_main_bottom_first{
+    position: absolute;
+    height: 350px;
+    margin-left: 0.5%;
+    width: 15%;
+}
+.game_main_bottom_second{
+    position: absolute;
+    left: 25.2%;
+    height: 350px;
+    margin-left: 0.5%;
+    width: 15%;
+}
+.game_main_bottom_third{
+    position: absolute;
+    left: 42%;
+    height: 350px;
+    margin-left: 0.5%;
+    width: 15%;
+}
+.game_main_bottom_fourth{
+    position: absolute;
+    left: 59%;
+    height: 350px;
+    margin-left: 0.5%;
+    width: 15%;
+}
+.game_main_bottom_fifth{
+    position: absolute;
+    left: 75.6%;
+    height: 350px;
+    margin-left: 0.5%;
+    width: 15%;
+}
+.game_desc_bottom{
+    padding-top: 20px;
+    z-index: -1;
+    width: 100%;
+    height: 350px;
+    position: relative;
+    bottom: 350px;
+}
+.game_desc_bottom_first{
+    position: absolute;
+    margin-left: 2%;
+    width: 16%;
+}
+.game_desc_bottom_second{
+    position: absolute;
+    left: 20%;
+    margin-left: 2%;
+    width: 16%;
+}
+.game_desc_bottom_third{
+    position: absolute;
+    left: 40%;
+    margin-left: 2%;
+    width: 16%;
+}
+.game_desc_bottom_fourth{
+    position: absolute;
+    left: 60%;
+    margin-left: 2%;
+    width: 16%;
+}
+.game_desc_bottom_fifth{
+    position: absolute;
+    left: 80%;
+    margin-left: 2%;
+    width: 16%;
+}
+/*返回主页*/
+.other_right{
+    position: absolute;
+    left: 88%;
+    bottom: 5%;
+    width: 10%;
+    height: 20%;
+    text-align: center;
+    line-height: 700%;
+    font-size: 20px;
+    opacity: 0.7;
+}
+
+
+
+/*赞助商*/
+.other_left{
+    position: absolute;
+    bottom: 5%;
+    left: 5%;
+    width: 80%;
+    height: 20%;
+}
+.other_left_title{
+    position: absolute;
+    width: 5%;
+    height: 100%;
+    font-size: 40px;
+    opacity: 0.7;
+    letter-spacing: 10px;
+    animation: change1 5s linear 0s infinite;
+    font-weight: bold;
+    font-family: cursive;
+    text-align: center;
+    line-height: 120%;
+}
+@keyframes change1 {
+    0% {color: black;}
+    25% {color: orange;}
+    50% {color: red;}
+    75% {color: orange;}
+    100% {color: black;}
+}
+.other_left_desc{
+    position: absolute;
+    left: 5%;
+    height: 100%;
+    opacity: 0.8;
+    letter-spacing: 2px;
+}

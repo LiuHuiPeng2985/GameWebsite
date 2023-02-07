@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="../js/common/vue.js"></script>
+    <script src="../js/common/axios.js"></script>
+    <script src="../element-ui/index.js"></script>
+    <link rel="stylesheet" href="../element-ui/theme-chalk/index.css">
+    <link rel="stylesheet" href="../css/type/game_all_type_header.css">
+    <link rel="stylesheet" href="../css/type/game_type_main.css">
+    <link rel="stylesheet" href="../css/type/game_all_type_footer.css">
+</head>
+<body>
+<div id="app" @mousewheel="showHeaderWheel">
+    <!--页面标题-->
+    <div v-title :title='1'></div>
+    <header class="header">
+        <el-row v-show="showHeader">
+            <el-col :span="24" class="elCol">
+                <!--网站logo-->
+                <div class="homepage_logo" style="display: inline-block">
+                    <img src="../img/homepage_logo.png" style="width: 70px;height: 50px">
+                </div>
+                <!--首页-->
+                <div class="homepage" style="display: inline-block">
+                    <a href="game.html">
+                        <div class="homepage">
+                            <i class="el-icon-house"><span style="font-weight: bold">首页</span></i>
+                        </div>
+                    </a>
+                </div>
+                <!--个人空间-->
+                <div class="personal_space" style="display: inline-block;">
+                    <a href="personal.html">
+                        <div class="personal_space">
+                            <i class="el-icon-user"><span style="font-weight: bold">个人空间</span></i>
+                        </div>
+                    </a>
+                </div>
+                <!--游戏更新列表-->
+                <div class="update_list" style="display: inline-block">
+                    <a class="update_list_a" href="gameUpdateList.html">
+                        <div class="update_list" style="font-weight: bold">
+                            游戏更新列表
+                        </div>
+                    </a>
+                </div>
+                <!--资讯-->
+                <div class="notice" style="display: inline-block">
+                    <a href="notice.html">
+                        <div class="notice">
+                            <i class="el-icon-document-copy"><span style="font-weight: bold">资讯</span></i>
+                        </div>
+                    </a>
+                </div>
+                <!--游戏攻略及其它-->
+                <div class="strategy" style="display: inline-block">
+                    <a class="strategy_a" href="strategy.html">
+                        <div class="strategy" style="font-weight: bold">
+                            游戏攻略及其它
+                        </div>
+                    </a>
+                </div>
+            </el-col>
+        </el-row>
+    </header>
+    <main class="main">
+        <!--类型字体及照片-->
+        <div class="all_game_main" v-bind:style="gameTypeTitleCss">
+            <h1>{{gameTypeTitle}}</h1>
+        </div>
+        <!--返回主页-->
+        <div class="back_all_game_main">
+            <el-row>
+                <el-col :span="22" :offset="1" >
+                    <el-page-header style="line-height: 40px" @back="goBack" title="全部游戏" content="⬇ 游戏类型 ⬇">
+                    </el-page-header>
+                </el-col>
+            </el-row>
+        </div>
+        <!--游戏类型间的跳转-->
+        <div class="game_type_jump_main">
+            <el-row>
+                <el-col :span="20" :offset="2" >
+                    <el-tabs v-model="activeName" @tab-click="handleClick">
+                        <el-tab-pane label="休闲游戏" name="1"></el-tab-pane>
+                        <el-tab-pane label="即时战略" name="2"></el-tab-pane>
+                        <el-tab-pane label="射击游戏" name="3"></el-tab-pane>
+                        <el-tab-pane label="恐怖惊悚" name="4"></el-tab-pane>
+                        <el-tab-pane label="格斗游戏" name="5"></el-tab-pane>
+                        <el-tab-pane label="模拟经营" name="6"></el-tab-pane>
+                        <el-tab-pane label="生存类型" name="7"></el-tab-pane>
+                        <el-tab-pane label="竞速体育" name="8"></el-tab-pane>
+                        <el-tab-pane label="角色扮演" name="9"></el-tab-pane>
+                    </el-tabs>
+                </el-col>
+            </el-row>
+        </div>
+        <!--操作摁键-->
+        <div style="width: 100%;height: 50px;background-color: white;line-height: 50px">
+            <el-row>
+                <el-col :span="22" :offset="1">
+                    <div class="choice_main"><span style="opacity: 0.7">请选择游戏展示的方式:</span>
+                        <el-switch
+                                @change="choiceMode"
+                                v-model="value"
+                                active-color="#FFB0FC"
+                                inactive-color="#2FFDFF">
+                        </el-switch>
+                    </div>
+                    <div class="type_main">
+                        <el-tabs type="card">
+                            <el-tab-pane>
+                                <span slot="label" @click="newest"><i class="el-icon-time"></i>最新</span>
+                            </el-tab-pane>
+                            <el-tab-pane>
+                                <span slot="label" @click="popular"><i class="el-icon-star-off"></i>热度</span>
+                            </el-tab-pane>
+                        </el-tabs>
+                    </div>
+                </el-col>
+            </el-row>
+        </div>
+        <!--游戏第一种展示方式-->
+        <div class="game_first_main" v-show="showFirst">
+            <!--主体-->
+            <div class="game_first_body">
+                <el-row>
+                    <el-col :span="4" class="game_first_body_goods" v-for="item in allGameList">
+                        <div style="width: 100%;height: 100%;border-radius: 10px;">
+                            <!--上层-->
+                            <div style="width: 100%;height: 40%;border-radius : 10px 10px 0 0;">
+                                <!--图片-->
+                                <div class="game_first_body_img">
+                                    <a v-bind:href="nameUrl" @click="nameJump(item.id)" style="cursor: pointer">
+                                        <img class="game_first_img_media" v-bind:src="item.img">
+                                    </a>
+                                </div>
+                            </div>
+                            <!--下层-->
+                            <div style="width: 100%;height: 60%;border-radius : 0 0 10px 10px;">
+                                <!--内容-->
+                                <div class="game_first_content">
+                                    <!--游戏类型-->
+                                    <div class="game_first_content_type">
+                                        <i class="el-icon-info"></i>
+                                        <a class="dark_b" v-bind:href="typeUrl" style="cursor: pointer" @click="typeJump(item.type)">{{item.type}}</a>
+                                    </div>
+                                    <!--游戏名称-->
+                                    <div class="game_first_content_name">
+                                        <a class="dark_a" v-bind:href="nameUrl" @click="nameJump(item.id)" style="cursor: pointer">{{item.name}}</a>
+                                    </div>
+                                    <!--游戏版本信息-->
+                                    <div class="game_first_content_edition">
+                                        <div class="game_first_content_edition_desc">
+                                            {{item.edition}}
+                                        </div>
+                                    </div>
+                                    <!--更新时间-->
+                                    <div class="game_first_content_time">
+                                        <i class="el-icon-time game_first_content_time_i"></i>
+                                        <div class="game_first_content_time_desc">
+                                            {{item.createTime}}
+                                        </div>
+                                    </div>
+                                    <!--点赞-->
+                                    <div class="game_first_content_good">
+                                        <i class="el-icon-thumbs game_first_content_good_i" style="font-size: 12px"></i>
+                                        <div class="game_first_content_good_desc">
+                                            {{item.likes}}
+                                        </div>
+                                    </div>
+                                    <!--价格-->
+                                    <div class="game_first_content_money">
+                                        <i class="el-icon-moneys game_first_content_money_i" style="font-size: 12px"></i>
+                                        <div class="game_first_content_money_desc">
+                                            {{item.price}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </el-col>
+                </el-row>
+            </div>
+        </div>
+        <!--游戏第二种展示方式-->
+        <div class="game_second_main" v-show="showSecond">
+            <!--主体-->
+            <div class="game_second_main_body">
+                <el-row>
+                    <el-col :span="11" class="game_second_main_body_goods" v-for="item in allGameList">
+                        <div style="width: 100%;height: 100%;">
+                            <!--左侧-->
+                            <div style="width: 30%;height: 100%;float: left;">
+                                <!--图片-->
+                                <div class="game_second_main_img">
+                                    <a v-bind:href="nameUrl" @click="nameJump(item.id)">
+                                        <img class="game_second_main_img_media" v-bind:src="item.img">
+                                    </a>
+                                </div>
+                            </div>
+                            <!--右侧-->
+                            <div style="width: 70%;height: 100%;float: left">
+                                <!--内容-->
+                                <div class="game_second_main_content">
+                                    <!--游戏类型-->
+                                    <div class="game_second_main_content_type">
+                                        <i class="el-icon-info"></i>
+                                        <a class="dark_b" v-bind:href="typeUrl" style="cursor: pointer" @click="typeJump(item.type)">{{item.type}}</a>
+                                    </div>
+                                    <!--游戏名称-->
+                                    <div class="game_second_main_content_name">
+                                        <a class="dark_a" v-bind:href="nameUrl" @click="nameJump(item.id)">{{item.name}}</a>
+                                    </div>
+                                    <!--游戏版本信息-->
+                                    <div class="game_second_main_content_edition">
+                                        <div class="game_second_main_content_edition_desc">
+                                            {{item.edition}}
+                                        </div>
+                                    </div>
+                                    <!--更新时间-->
+                                    <div class="game_second_main_content_time">
+                                        <i class="el-icon-time game_second_main_content_time_i"></i>
+                                        <div class="game_second_main_content_time_desc">
+                                            {{item.createTime}}
+                                        </div>
+                                    </div>
+                                    <!--点赞-->
+                                    <div class="game_second_main_content_good">
+                                        <i class="el-icon-thumbs game_second_main_content_good_i" style="font-size: 12px"></i>
+                                        <div class="game_second_main_content_good_desc">
+                                            {{item.likes}}
+                                        </div>
+                                    </div>
+                                    <!--价格-->
+                                    <div class="game_second_main_content_money">
+                                        <i class="el-icon-moneys game_second_main_content_money_i" style="font-size: 12px"></i>
+                                        <div class="game_second_main_content_money_desc">
+                                            {{item.price}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </el-col>
+                </el-row>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <!--logo-->
+        <div class="logo_footer">
+            <img class="logo_footer_img" src="../img/homepage_logo.png">
+            <div class="logo_footer_words">懂哥游戏，懂得都懂</div>
+        </div>
+        <!--声明协议-->
+        <div class="agreement_footer">
+            <b><i class="el-icon-tickets"></i>协议</b>
+            <el-row class="agreement_footer_row">
+                <el-button size="mini" class="dark"><a href="rules/userAgreement.html">用户协议</a></el-button><br/>
+                <el-button size="mini" class="dark"><a href="rules/privacyPolicy.html">隐私政策</a></el-button>
+            </el-row>
+        </div>
+        <!--赞助商-->
+        <div class="sponsor_footer">
+            <b><i class="el-icon-user-solid"></i>合作伙伴</b>&nbsp;<a style="color: #999999;" href="cooperativePartner.html">详情</a>
+            <div style="color:#606266;">开发者本人非常乐意志同道合的小伙伴能加入其中</div>
+            <div style="color:#606266;">有意愿者可添加QQ:2456867076</div>
+        </div>
+        <!--结语-->
+        <div class="last_footer">
+            本站所有资源来源于互联网！若侵犯到您的权益，请联系站长2456867076@qq.com，我们将及时处理。
+        </div>
+
+    </footer>
+    <!--返回顶部-->
+    <el-backtop style="right: 10px" @click="rocketShowHeader">
+        <i class="el-icon-rocket"></i>
+    </el-backtop>
+    <!--刷新-->
+    <span
+            type="primary"
+            @click="openFullScreen">
+    </span>
+</div>
+
+
+<script>
+    /*获得游戏类型名*/
+    var url = location.search;
+    var str = url.substr(1);
+    str2=decodeURI(decodeURI(str));
+    var app = new Vue({
+        el:"#app",
+        data(){
+            return{
+                /*滚动前，滚动条距文档顶部的距离*/
+                oldScrollTop : 0,
+                allGameList:[],
+                /*头部的展示与隐藏*/
+                showHeader: true,
+                /*游戏类型跳转*/
+                typeUrl:'',
+                /*游戏名跳转详细页*/
+                nameUrl:'',
+                /*展示方式*/
+                showFirst: true,
+                showSecond: false,
+                value: true,
+                /*主体游戏类型名*/
+                gameTypeTitle:'',
+                /*主体游戏类型CSS*/
+                gameTypeTitleCss:{},
+                /*游戏类型间的跳转*/
+                activeName: '',
+            }
+        },
+        methods:{
+            /*修改主体游戏类型名及CSS*/
+            modifyGameTypeAndCss(){
+                this.gameTypeTitle = str2;
+                if (str2 == '休闲游戏'){
+                    this.gameTypeTitleCss = {
+                        height: '50px',
+                        background: '-webkit-linear-gradient(left top, blue , yellow)',
+                        opacity: '0.5',
+                        textAlign: 'center',
+                        lineHeight: '50px',
+                        letterSpacing: '10px',
+                    }
+                }else if (str2 == '即时战略'){
+                    this.gameTypeTitleCss = {
+                        height: '50px',
+                        background: '-webkit-linear-gradient(left top, #f0c78a, firebrick)',
+                        opacity: '0.4',
+                        textAlign: 'center',
+                        lineHeight: '50px',
+                        letterSpacing: '10px',
+                    }
+                }else if (str2 == '射击游戏'){
+                    this.gameTypeTitleCss = {
+                        height: '50px',
+                        background: '-webkit-linear-gradient(left top, green, blue)',
+                        opacity: '0.4',
+                        textAlign: 'center',
+                        lineHeight: '50px',
+                        letterSpacing: '10px',
+                    }
+                }else if (str2 == '恐怖惊悚'){
+                    this.gameTypeTitleCss = {
+                        height: '50px',
+                        background: '-webkit-linear-gradient(left top, black, red)',
+                        opacity: '0.4',
+                        textAlign: 'center',
+                        lineHeight: '50px',
+                        letterSpacing: '10px',
+                    }
+                }else if (str2 == '格斗游戏'){
+                    this.gameTypeTitleCss = {
+                        height: '50px',
+                        background: '-webkit-linear-gradient(left top, rosybrown, cornflowerblue)',
+                        opacity: '0.4',
+                        textAlign: 'center',
+                        lineHeight: '50px',
+                        letterSpacing: '10px',
+                    }
+                }else if (str2 == '模拟经营'){
+                    this.gameTypeTitleCss = {
+                        height: '50px',
+                        background: '-webkit-linear-gradient(left top, red, gold)',
+                        opacity: '0.4',
+                        textAlign: 'center',
+                        lineHeight: '50px',
+                        letterSpacing: '10px',
+                    }
+                }else if (str2 == '生存类型'){
+                    this.gameTypeTitleCss = {
+                        height: '50px',
+                        background: '-webkit-linear-gradient(left top, yellowgreen, #5daf34)',
+                        opacity: '0.4',
+                        textAlign: 'center',
+                        lineHeight: '50px',
+                        letterSpacing: '10px',
+                    }
+                }else if (str2 == '竞速体育'){
+                    this.gameTypeTitleCss = {
+                        height: '50px',
+                        background: '-webkit-linear-gradient(left top, rebeccapurple, #cf9236)',
+                        opacity: '0.4',
+                        textAlign: 'center',
+                        lineHeight: '50px',
+                        letterSpacing: '10px',
+                    }
+                }else if (str2 == '角色扮演'){
+                    this.gameTypeTitleCss = {
+                        height: '50px',
+                        background: '-webkit-linear-gradient(left top, navy, chartreuse)',
+                        opacity: '0.4',
+                        textAlign: 'center',
+                        lineHeight: '50px',
+                        letterSpacing: '10px',
+                    }
+                }
+
+            },
+            /*返回全部游戏页面*/
+            goBack() {
+                location.href = 'allGames.html';
+            },
+            /*默认游戏类型初始化*/
+            initializationGameType(){
+                if (str2 == "休闲游戏"){
+                    this.activeName = '1';
+                }else if (str2 == "即时战略"){
+                    this.activeName = '2';
+                }else if (str2 == "射击游戏"){
+                    this.activeName = '3';
+                }else if (str2 == "恐怖惊悚"){
+                    this.activeName = '4';
+                }else if (str2 == "格斗游戏"){
+                    this.activeName = '5';
+                }else if (str2 == "模拟经营"){
+                    this.activeName = '6';
+                }else if (str2 == "生存类型"){
+                    this.activeName = '7';
+                }else if (str2 == "竞速体育"){
+                    this.activeName = '8';
+                }else if (str2 == "角色扮演"){
+                    this.activeName = '9';
+                }
+            },
+            /*游戏类型间的跳转*/
+            handleClick() {
+                if (this.activeName == '1'){
+                    location.href = 'gameType.html?休闲游戏'
+                }else if (this.activeName == '2'){
+                    location.href = 'gameType.html?即时战略'
+                }else if (this.activeName == '3'){
+                    location.href = 'gameType.html?射击游戏'
+                }else if (this.activeName == '4'){
+                    location.href = 'gameType.html?恐怖惊悚'
+                }else if (this.activeName == '5'){
+                    location.href = 'gameType.html?格斗游戏'
+                }else if (this.activeName == '6'){
+                    location.href = 'gameType.html?模拟经营'
+                }else if (this.activeName == '7'){
+                    location.href = 'gameType.html?生存类型'
+                }else if (this.activeName == '8'){
+                    location.href = 'gameType.html?竞速体育'
+                }else if (this.activeName == '9'){
+                    location.href = 'gameType.html?角色扮演'
+                }
+            },
+            /*获取游戏类型名*/
+            unctionGetRequest(){
+                var url = location.search;
+                var str = url.substr(1);
+                str2=decodeURI(decodeURI(str));
+            },
+            /*赞助商*/
+            openSponsor() {
+                this.$alert('张鼎勇同学 : 对本站提供了绘画支持', '赞助商', {
+                    confirmButtonText: '确定',
+                });
+            },
+            /*头部的隐藏与展示*/
+            showHeaderWheel(){
+                // 滚动条距文档顶部的距离
+                let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+                // 滚动条滚动的距离
+                let scrollStep = scrollTop - this.oldScrollTop;
+                // 更新——滚动前，滚动条距文档顶部的距离
+                this.oldScrollTop = scrollTop;
+                if (this.oldScrollTop == 0 && scrollStep == 0){
+                    this.showHeader = true;
+                }
+                if (scrollStep < 0) {
+                    this.showHeader = true;
+                } else if( scrollStep > 0){
+                    this.showHeader = false;
+                } else if(this.oldScrollTop == 0 && scrollStep == 0){
+                    this.showHeader = true;
+                } else if (this.oldScrollTop > 0 && scrollStep == 0){
+                    this.showHeader = false;
+                }
+            },
+            /*点击火箭展示头部*/
+            rocketShowHeader(){
+                this.showHeader = true;
+            },
+            /*展示游戏方式*/
+            choiceMode(){
+                if (this.value == true){
+                    const loading = this.$loading({
+                        lock: true,
+                        text: '布局重新加载中',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(255, 255, 255, 0.7)'
+                    });
+                    setTimeout(() => {
+                        loading.close();
+                        this.fullscreenLoading = false;
+                        this.showFirst = true;
+                        this.showSecond = false;
+                        this.$message.success("加载完毕")
+                    }, 1000);
+                }else {
+                    const loading = this.$loading({
+                        lock: true,
+                        text: '布局重新加载中',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(255, 255, 255, 0.7)'
+                    });
+                    setTimeout(() => {
+                        loading.close();
+                        this.fullscreenLoading = false;
+                        this.showFirst = false;
+                        this.showSecond = true;
+                        this.$message.success("加载完毕")
+                    }, 1000);
+                }
+            },
+            openFullScreen() {
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)'
+                });
+                setTimeout(() => {
+                    loading.close();
+                }, 2000);
+            },
+            /*按最新排序*/
+            newest(){
+                axios.get("/game/type/time/"+str2).then((res)=>{
+                    const loading = this.$loading({
+                        lock: true,
+                        text: '游戏加载中',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(255, 255, 255, 0.8)'
+                    });
+                    setTimeout(() => {
+                        loading.close();
+                        this.allGameList = res.data.data;
+                    }, 500);
+                },function(err){
+                    alert("失败");
+                })
+            },
+            /*按热度排序*/
+            popular(){
+                axios.get("/game/type/likes/"+str2).then((res)=>{
+                    const loading = this.$loading({
+                        lock: true,
+                        text: '游戏加载中',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(255, 255, 255, 0.8)'
+                    });
+                    setTimeout(() => {
+                        loading.close();
+                        this.allGameList = res.data.data;
+                    }, 500);
+                },function(err){
+                    alert('失败');
+                })
+            },
+            /*游戏类型跳转*/
+            typeJump(type){
+                if (type == "休闲游戏"){
+                    this.typeUrl = "gameType.html?休闲游戏"
+                }else if (type == "即时战略"){
+                    this.typeUrl = "gameType.html?即时战略"
+                }else if (type == "射击游戏"){
+                    this.typeUrl = "gameType.html?射击游戏"
+                }else if (type == "恐怖惊悚"){
+                    this.typeUrl = "gameType.html?恐怖惊悚"
+                }else if (type == "格斗游戏"){
+                    this.typeUrl = "gameType.html?格斗游戏"
+                }else if (type == "模拟经营"){
+                    this.typeUrl = "gameType.html?模拟经营"
+                }else if (type == "生存类型"){
+                    this.typeUrl = "gameType.html?生存类型"
+                }else if (type == "竞速体育"){
+                    this.typeUrl = "gameType.html?竞速体育"
+                }else{
+                    this.typeUrl = "gameType.html?角色扮演"
+                }
+            },
+            /*通过游戏名跳转页面详情页*/
+            nameJump(id){
+                this.nameUrl = "gameDetails.html?"+id;
+            },
+        },
+        /*页面加载完毕执行函数*/
+        mounted: function(){
+            /*修改主体游戏类型名及CSS*/
+            this.modifyGameTypeAndCss();
+            /*默认游戏类型初始化*/
+            this.initializationGameType();
+            // 默认最新游戏
+            this.newest();
+            // 监听页面滚动事件
+            window.addEventListener("scroll", this.scrolling);
+            /*当前登录的用户id*/
+            console.log(sessionStorage.getItem('userId'));
+        },
+        created:function(){
+        },
+        directives: {
+            title: {
+                inserted: function (title) {
+                    var url = location.search;
+                    var str = url.substr(1);
+                    str2=decodeURI(decodeURI(str));
+                    /*修改标题*/
+                    title.title = str2;
+                    document.title = title.getAttribute('title') // 页面加载完成之后自动
+                }
+            }
+        },
+    })
+</script>
+</body>
+</html>

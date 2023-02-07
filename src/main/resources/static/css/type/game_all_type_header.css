@@ -1,0 +1,63 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+a{
+    text-decoration: none;
+    color: #333333;
+}
+/*首页game页面的页头header样式*/
+.elCol{
+    position: fixed;
+    z-index: 1;
+    height: 80px;
+    background-color: white;
+    padding: 10px;
+    float: left;
+}
+/*网站logo*/
+.homepage_logo{
+    position: relative;
+    left: 3%;
+}
+/*首页*/
+.homepage{
+    color: black;
+    position: relative;
+    bottom: 8px;
+    left: 9%;
+}
+/*全部游戏*/
+.personal_space{
+    color: #333333;
+    position: relative;
+    bottom: 8px;
+    left: 10%;
+    height: 20px;
+}
+/*游戏更新列表*/
+.update_list{
+    color: #333333;
+    position: relative;
+    bottom: 8px;
+    left: 11%;
+    height: 20px;
+}
+.update_list_a{
+    text-decoration: none;
+}
+/*资讯*/
+.notice{
+    color: black;
+    position: relative;
+    bottom: 8px;
+    left: 13%;
+}
+/*游戏攻略及其它*/
+.strategy{
+    color: #333333;
+    position: relative;
+    bottom: 8px;
+    left: 14%;
+    height: 20px;
+}

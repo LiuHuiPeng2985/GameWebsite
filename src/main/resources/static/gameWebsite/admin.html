@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理</title>
+    <script src="../js/common/vue.js"></script>
+    <script src="../js/common/axios.js"></script>
+    <script src="../element-ui/index.js"></script>
+    <link rel="stylesheet" href="../element-ui/theme-chalk/index.css">
+    <link rel="stylesheet" href="../css/admin/admin.css">
+</head>
+<body>
+<div id="app">
+    <!--左侧功能-->
+    <el-row class="tac" style="width: 15%;height: 100%;position: fixed">
+        <el-col :span="24">
+            <el-menu
+                    default-active="4"
+                    class="el-menu-vertical-demo"
+                    style="width: 100%;height: 100%;position: absolute"
+                    @select="opens"
+                    background-color="#545c64"
+                    text-color="#fff"
+                    active-text-color="#ffd04b">
+                <el-submenu index="1">
+                    <template slot="title">
+                        <i class="el-icon-coordinate"></i>
+                        <span>游戏管理</span>
+                    </template>
+                        <el-menu-item index="1-1">全部游戏</el-menu-item>
+                        <el-menu-item index="1-2">上架新游戏</el-menu-item>
+                </el-submenu>
+                <el-menu-item index="2">
+                    <i class="el-icon-s-opportunity"></i>
+                    <span slot="title">攻略管理</span>
+                </el-menu-item>
+                <el-menu-item index="3">
+                    <i class="el-icon-chat-dot-round"></i>
+                    <span slot="title">评论管理</span>
+                </el-menu-item>
+                <el-menu-item index="4">
+                    <i class="el-icon-s-custom"></i>
+                    <span slot="title">用户管理</span>
+                </el-menu-item>
+                <el-menu-item index="5" @click="quit">
+                    <i class="el-icon-error"></i>
+                    <span slot="title">退出登录</span>
+                </el-menu-item>
+            </el-menu>
+        </el-col>
+    </el-row>
+    <!--全部游戏-->
+    <el-row v-show="show1" class="tac" style="width: 85%;height: 100%;position: absolute;left:15%;background-color: whitesmoke">
+        <el-col :span="24">
+            <div class="all_game_title">
+                <h1>全部游戏</h1>
+            </div>
+            <div class="all_game_choose">
+                <el-row>
+                    <el-col :span="22" :offset="1">
+                        <el-tabs type="card">
+                            <el-tab-pane>
+                                <span slot="label" @click="defaultGame"><i class="el-icon-s-grid"></i>默认</span>
+                            </el-tab-pane>
+                            <el-tab-pane>
+                                <span slot="label" @click="moneyGame"><i class="el-icon-money"></i>价格</span>
+                            </el-tab-pane>
+                            <el-tab-pane>
+                                <span slot="label" @click="likesGame"><i class="el-icon-thumb"></i>点赞</span>
+                            </el-tab-pane>
+                            <el-tab-pane>
+                                <span slot="label" @click="salesGame"><i class="el-icon-shopping-cart-2"></i>销量</span>
+                            </el-tab-pane>
+                            <el-tab-pane>
+                                <span slot="label" @click="newestGame"><i class="el-icon-time"></i>最新</span>
+                            </el-tab-pane>
+                            <el-tab-pane>
+                                <span slot="label" @click="recommendGame"><i class="el-icon-loading"></i>推荐</span>
+                            </el-tab-pane>
+                            <el-tab-pane>
+                                <span slot="label" @click="notExistGame"><i class="el-icon-folder-delete"></i>下架</span>
+                            </el-tab-pane>
+                        </el-tabs>
+                    </el-col>
+                </el-row>
+            </div>
+            <div class="all_game_desc">
+                <el-row>
+                    <el-col :span="3" class="all_game_body" v-for="item in allGameList.slice((currentPage-1)*pageSize,currentPage*pageSize)">
+                        <el-card shadow="hover" style="height: 100%;border-radius: 10px;padding: 0" >
+                            <!--上层-->
+                            <div class="all_game_top" >
+                                <img class="all_game_top_img" v-bind:src="item.img" @click="descGameImg(item.id)">
+                            </div>
+                            <!--下层-->
+                            <div class="all_game_bottom" @click="descGame(item.id)">
+                                <!--默认/推荐-->
+                                <div class="all_game_bottom_showGame1" v-show="showGame1">
+                                    <div class="all_game_bottom_showGame1_name">
+                                        {{item.name}}
+                                    </div>
+                                    <div>
+                                        <i class="el-icon-moneys"></i> {{item.price}}&nbsp;&nbsp;&nbsp;<i class="el-icon-sales"></i> {{item.sales}}&nbsp;&nbsp;&nbsp;<i class="el-icon-thumbs"></i> {{item.likes}}
+                                    </div>
+                                    <div style="margin-top: 5px">
+                                        <i class="el-icon-time" style="font-size: 14px"></i> <span style="font-size: 14px">{{item.createTime}}</span>
+                                    </div>
+                                </div>
+                                <!--价格-->
+                                <div class="all_game_bottom_showGame2" v-show="showGame2">
+                                    <div class="all_game_bottom_showGame2_name">
+                                        {{item.name}}
+                                    </div>
+                                    <div style="margin-top: 5px">
+                                        <i class="el-icon-moneys"></i> {{item.price}}
+                                    </div>
+                                </div>
+                                <!--点赞-->
+                                <div class="all_game_bottom_showGame3" v-show="showGame3">
+                                    <div class="all_game_bottom_showGame2_name">
+                                        {{item.name}}
+                                    </div>
+                                    <div style="margin-top: 5px">
+                                        <i class="el-icon-thumbs"></i> {{item.likes}}
+                                    </div>
+                                </div>
+                                <!--销量-->
+                                <div class="all_game_bottom_showGame4" v-show="showGame4">
+                                    <div class="all_game_bottom_showGame2_name">
+                                        {{item.name}}
+                                    </div>
+                                    <div style="margin-top: 5px">
+                                        <i class="el-icon-sales"></i> {{item.sales}}
+                                    </div>
+                                </div>
+                                <!--最新-->
+                                <div class="all_game_bottom_showGame5" v-show="showGame5">
+                                    <div class="all_game_bottom_showGame2_name">
+                                        {{item.name}}
+                                    </div>
+                                    <div style="margin-top: 5px">
+                                        <i class="el-icon-time" style="font-size: 14px"></i> <span style="font-size: 14px">{{item.createTime}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </el-card>
+                    </el-col>
+                </el-row>
+                <el-pagination
+                        style="text-align: center"
+                        background
+                        :hide-on-single-page="true"
+                        @current-change="handleCurrentChange"
+                        :current-page="currentPage"
+                        :page-size="pageSize"
+                        :total="allGameList.length"
+                        layout="prev, pager, next">
+                </el-pagination>
+            </div>
+            <el-drawer
+                    style="width: 150%;"
+                    :title="gameDescName"
+                    :visible.sync="gameDescDrawer"
+                    direction="ltr"
+                    ref="drawer">
+                <div class="demo-drawer__content" style="width: 95%;position: relative;left: 2%">
+                    <el-form label-position="left" :model="gameDescForm" ref="gameDescForm" size="medium" :disabled="gameDescFormDisabled" autocomplete="off" :rules="rules">
+                        <el-form-item label="游戏名" prop="name">
+                            <el-input v-model="gameDescForm.name" style="width: 500px"></el-input>
+                        </el-form-item>
+                        <el-form-item label="上架时间" prop="createTime">
+                            <el-input v-model="gameDescForm.createTime" style="width: 180px" :disabled="true"></el-input>
+                        </el-form-item>
+                        <el-form-item label="游戏价格" prop="price">
+                            <el-input v-model.number="gameDescForm.price" style="width: 100px"></el-input>
+                        </el-form-item>
+                        <el-form-item label="销量" prop="sales">
+                            <el-input v-model="gameDescForm.sales" style="width: 80px" :disabled="true"></el-input>
+                        </el-form-item>
+                        <el-form-item label="点赞" prop="likes">
+                            <el-input v-model="gameDescForm.likes" style="width: 80px" :disabled="true"></el-input>
+                        </el-form-item><br/>
+                        <el-form-item label="游戏版本介绍" prop="edition">
+                            <el-input type="textarea" v-model="gameDescForm.edition" style="width: 520px"></el-input>
+                        </el-form-item>
+                        <el-form-item label="游戏介绍" prop="introduce">
+                            <el-input type="textarea" v-model="gameDescForm.introduce" style="width: 550px"></el-input>
+                        </el-form-item>
+                        <el-form-item label="游戏配置(操作系统)" prop="configFirst">
+                            <el-input type="textarea" v-model="gameDescForm.configFirst" style="width: 490px"></el-input>
+                        </el-form-item>
+                        <el-form-item label="游戏配置(处理器)" prop="configSecond">
+                            <el-input type="textarea" v-model="gameDescForm.configSecond" style="width: 500px"></el-input>
+                        </el-form-item>
+                        <el-form-item label="游戏配置(显卡)" prop="configThird">
+                            <el-input type="textarea" v-model="gameDescForm.configThird" style="width: 510px"></el-input>
+                        </el-form-item>
+                        <el-form-item label="游戏配置(内存)" prop="configFourth">
+                            <el-input v-model="gameDescForm.configFourth" style="width: 120px"></el-input>
+                        </el-form-item>
+                        <el-form-item label="游戏配置(存储空间)" prop="configFifth">
+                            <el-input v-model="gameDescForm.configFifth" style="width: 180px"></el-input>
+                        </el-form-item>
+                        <el-form-item label="游戏类型">
+                            <el-select v-model="gameDescForm.type">
+                                <el-option label="休闲游戏" value="休闲游戏"></el-option>
+                                <el-option label="即时战略" value="即时战略"></el-option>
+                                <el-option label="射击游戏" value="射击游戏"></el-option>
+                                <el-option label="恐怖惊悚" value="恐怖惊悚"></el-option>
+                                <el-option label="格斗游戏" value="格斗游戏"></el-option>
+                                <el-option label="模拟经营" value="模拟经营"></el-option>
+                                <el-option label="生存类型" value="生存类型"></el-option>
+                                <el-option label="竞速体育" value="竞速体育"></el-option>
+                                <el-option label="角色扮演" value="角色扮演"></el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="是否推荐(1:推荐;0:不推荐)">
+                            <el-select v-model="gameDescForm.recommend">
+                                <el-option label="推荐(1)" value="1"></el-option>
+                                <el-option label="不推荐(0)" value="0"></el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="上架下架(1:上架中;0:已下架)">
+                            <el-select v-model="gameDescForm.exist">
+                                <el-option label="上架(1)" value="1"></el-option>
+                                <el-option label="下架(0)" value="0"></el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button type="primary" @click="modifyGameDescForm" style="width: 40%;height: 40px" :disabled="false">修改</el-button>
+                            <el-button type="success" @click="submitGameDescForm('gameDescForm')" style="width: 40%;height: 40px">确认</el-button>
+                        </el-form-item>
+                    </el-form>
+                    <div class="demo-drawer__footer">
+                        <el-button @click="cancelForm">取 消</el-button>
+                    </div>
+                </div>
+            </el-drawer>
+            <el-drawer
+                    style="width: 100%;"
+                    :title="gameImgDescName"
+                    :visible.sync="gameImgDescDrawer"
+                    direction="rtl"
+                    ref="drawer">
+                <div class="demo-drawer__content" style="width: 95%;position: relative;left: 2%">
+                    <div>宣传图:</div>
+                    <img v-bind:src="gameDescImg" style="width: 100%;height: 150px">
+                    <div style="margin-top: 20px">游戏截图</div>
+                    <img v-bind:src="gameDescImg1" style="width: 100%;height: 140px">
+                    <img v-bind:src="gameDescImg2" style="width: 100%;height: 140px">
+                    <img v-bind:src="gameDescImg3" style="width: 100%;height: 140px">
+                </div>
+            </el-drawer>
+        </el-col>
+    </el-row>
+    <!--上架新游戏-->
+    <el-row v-show="show2" class="tac" style="width: 85%;height: 100%;position: absolute;left:15%;background-color: whitesmoke">
+        <el-col :span="24">
+            <!--左侧上架新游戏-->
+            <div class="new_game_left">
+                <el-card shadow="always" class="new_game_left_card">
+                    <el-form :model="addGameForm" ref="addGameForm" size="medium" :inline="true" autocomplete="off" :rules="rules" style="margin-top: 10px" label-position="left" enctype="multipart/form-data">
+                        <el-form-item label="游戏名" prop="name">
+                            <el-input v-model="addGameForm.name" style="width: 500px"></el-input>
+                        </el-form-item>
+                        <el-form-item label="游戏价格" prop="price">
+                            <el-input v-model.number="addGameForm.price" style="width: 100px" placeholder="数字"></el-input>
+                        </el-form-item>
+                        <el-form-item label="游戏版本介绍" prop="edition">
+                            <el-input type="textarea" v-model="addGameForm.edition" style="width: 850px"></el-input>
+                        </el-form-item>
+                        <el-form-item label="游戏介绍" prop="introduce">
+                            <el-input type="textarea" v-model="addGameForm.introduce" style="width: 878px"></el-input>
+                        </el-form-item>
+                        <el-form-item label="游戏配置(操作系统)" prop="configFirst">
+                            <el-input v-model="addGameForm.configFirst" style="width: 815px"></el-input>
+                        </el-form-item>
+                        <el-form-item label="游戏配置(处理器)" prop="configSecond">
+                            <el-input v-model="addGameForm.configSecond" style="width: 828px"></el-input>
+                        </el-form-item>
+                        <el-form-item label="游戏配置(显卡)" prop="configThird">
+                            <el-input v-model="addGameForm.configThird" style="width: 842px"></el-input>
+                        </el-form-item>
+                        <el-form-item label="游戏配置(内存)" prop="configFourth">
+                            <el-input v-model="addGameForm.configFourth" style="width: 120px" placeholder="XX GB RAM"></el-input>
+                        </el-form-item>
+                        <el-form-item label="游戏配置(存储空间)" prop="configFifth">
+                            <el-input v-model="addGameForm.configFifth" style="width: 170px" placeholder="需要 XX GB 可用空间"></el-input>
+                        </el-form-item>
+                        <el-form-item label="游戏类型" prop="type">
+                            <el-select v-model="addGameForm.type">
+                                <el-option label="休闲游戏" value="休闲游戏"></el-option>
+                                <el-option label="即时战略" value="即时战略"></el-option>
+                                <el-option label="射击游戏" value="射击游戏"></el-option>
+                                <el-option label="恐怖惊悚" value="恐怖惊悚"></el-option>
+                                <el-option label="格斗游戏" value="格斗游戏"></el-option>
+                                <el-option label="模拟经营" value="模拟经营"></el-option>
+                                <el-option label="生存类型" value="生存类型"></el-option>
+                                <el-option label="竞速体育" value="竞速体育"></el-option>
+                                <el-option label="角色扮演" value="角色扮演"></el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="是否推荐(1:推荐;0:不推荐)">
+                            <el-select v-model="addGameForm.recommend">
+                                <el-option label="推荐(1)" value="1"></el-option>
+                                <el-option label="不推荐(0)" value="0"></el-option>
+                            </el-select>
+                        </el-form-item><br/>
+                        <el-form-item label="上传图片(4张)" prop="files">
+                            <el-upload
+                                    v-model="addGameForm.files"
+                                    class="upload-demo"
+                                    ref="upload"
+                                    :limit="4"
+                                    multiple
+                                    accept=".jpg,.png"
+                                    action="http://127.0.0.1:8080/game/addGame"
+                                    list-type="picture-card"
+                                    :on-change="imgPreview"
+                                    :http-request="uploadFile"
+                                    :file-list="fileList"
+                                    :auto-upload="false">
+                                <i class="el-icon-plus"></i>
+                                <el-dialog :visible.sync="dialogVisible">
+                                    <img width="100%" :src="picUrl" alt="">
+                                </el-dialog>
+                            </el-upload>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button type="primary" class="submit-button" @click="submitUpload('addGameForm')">确认</el-button>
+                        </el-form-item>
+                    </el-form>
+                </el-card>
+            </div>
+            <!--右侧统计-->
+            <div class="new_game_right">
+                <el-card shadow="always" class="new_game_right_card">
+                    <div class="new_game_right_title">
+                        游戏统计
+                    </div><el-divider></el-divider>
+                    <div class="new_game_right_content">
+                        <div class="new_game_right_list"><span>游戏总数：</span><span style="color: blue;">{{allGameNumLength}}</span></div>
+                        <div class="new_game_right_list"><span>上架游戏数：</span><span style="color: blue;">{{allGameNumLength - bottomGameNumLength}}</span></div>
+                        <div class="new_game_right_list"><span>下架游戏数：</span><span style="color: blue;">{{bottomGameNumLength}}</span></div>
+                        <div class="new_game_right_list"><span>销量最多：</span><span style="color: blue;">{{salesTopGameName}}</span></div>
+                        <div class="new_game_right_list"> <span>点赞最多：</span><span style="color: blue;">{{likesTopGameName}}</span></div>
+                    </div>
+                </el-card>
+            </div>
+        </el-col>
+    </el-row>
+    <!--攻略管理-->
+    <el-row v-show="show3" class="tac" style="width: 85%;height: 100%;position: absolute;left:15%;background-color: whitesmoke">
+        <el-col :span="24">
+            <!--攻略统计-->
+            <div class="strategy_statistics">
+                <span class="strategy_statistics_desc">攻略总数：</span><span style="color:blue;">{{strategyTableData.length}}</span>
+                <span class="strategy_statistics_desc">过审攻略：</span><span style="color:blue;">{{reviewStrategyLength}}</span>
+                <span class="strategy_statistics_desc">未过审攻略：</span><span style="color:blue;">{{unapprovedStrategyLength}}</span>
+                <span class="strategy_statistics_desc">审核中的攻略：</span><span style="color:blue;">{{underReviewStrategyLength}}</span>
+            </div>
+            <!--攻略详情-->
+            <div class="strategy_content">
+                <el-table
+                        border
+                        height="100%"
+                        :data="strategyTableData"
+                        :row-class-name="tableRowClassName"
+                        style="width: 100%"
+                        :default-sort = "{prop: 'date', order: 'descending'}">
+                    <el-table-column
+                            prop="strategyCreateTime"
+                            label="日期"
+                            sortable
+                            width="160">
+                    </el-table-column>
+                    <el-table-column
+                            prop="userName"
+                            label="作者"
+                            width="120">
+                    </el-table-column>
+                    <el-table-column
+                            sortable
+                            :formatter="identityStateFormat"
+                            prop="userIdentity"
+                            label="身份"
+                            width="80">
+                    </el-table-column>
+                    <el-table-column
+                            :show-overflow-tooltip="true"
+                            prop="title"
+                            label="标题"
+                            width="180">
+                    </el-table-column>
+                    <el-table-column
+                            :show-overflow-tooltip="true"
+                            prop="content"
+                            label="内容"
+                            width="250">
+                    </el-table-column>
+                    <el-table-column
+                            :show-overflow-tooltip="true"
+                            prop="game"
+                            label="游戏"
+                            width="150">
+                    </el-table-column>
+                    <el-table-column
+                            sortable
+                            :formatter="passStateFormat"
+                            prop="pass"
+                            label="状态"
+                            width="80">
+                    </el-table-column>
+                    <el-table-column label="操作">
+                        <template slot-scope="scope">
+                            <el-button size="mini" @click="handleSee(scope.row)">查看</el-button>
+                            <span v-if="scope.row.pass == 0">
+                                <el-button size="mini" type="success" @click="adoptStrategy(scope.row)">通过审核</el-button>
+                                <el-button size="mini" type="danger" @click="noAdoptStrategy(scope.row)">禁止过审</el-button>
+                            </span>
+                            <span v-if="scope.row.pass == 1">
+                                <el-button size="mini" type="danger" @click="noAdoptStrategy(scope.row)">取消过审</el-button>
+                            </span>
+                            <span v-if="scope.row.pass == 2">
+                                <el-button size="mini" type="success" @click="adoptStrategy(scope.row)">重新过审</el-button>
+                            </span>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+        </el-col>
+    </el-row>
+    <!--评论管理-->
+    <el-row v-show="show4" class="tac" style="width: 85%;height: 100%;position: absolute;left:15%;background-color: whitesmoke">
+        <el-col :span="24">
+            <!--评论统计-->
+            <div class="comment_statistics">
+                <span class="comment_statistics_desc">总评论条数：</span><span style="color:blue;">{{commentTableData.length}}</span>
+            </div>
+            <!--评论详情-->
+            <div class="comment_content">
+                <el-table
+                        border
+                        height="100%"
+                        :data="commentTableData"
+                        :row-class-name="tableRowClassName"
+                        style="width: 100%"
+                        :default-sort = "{prop: 'date', order: 'descending'}">
+                    <el-table-column
+                            prop="commentTime"
+                            label="评论时间"
+                            sortable
+                            width="160">
+                    </el-table-column>
+                    <el-table-column
+                            sortable
+                            :formatter="identityStateFormat"
+                            prop="userIdentity"
+                            label="身份"
+                            width="80">
+                    </el-table-column>
+                    <el-table-column
+                            sortable
+                            prop="userId"
+                            label="用户编号"
+                            width="110">
+                    </el-table-column>
+                    <el-table-column
+                            prop="userName"
+                            label="用户"
+                            width="120">
+                    </el-table-column>
+                    <el-table-column
+                            prop="commentDesc"
+                            label="评论内容"
+                            width="450">
+                    </el-table-column>
+                    <el-table-column
+                            sortable
+                            prop="gameName"
+                            label="所属游戏"
+                            width="280">
+                    </el-table-column>
+                    <el-table-column label="操作">
+                        <template slot-scope="scope">
+                            <el-button size="mini" type="danger" @click="deleteComment(scope.row)">删除</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+        </el-col>
+    </el-row>
+    <!--用户管理-->
+    <el-row v-show="show5" class="tac" style="width: 85%;height: 100%;position: absolute;left:15%;background-color: whitesmoke">
+        <el-col :span="24">
+            <!--用户统计-->
+            <div class="user_statistics">
+                <span class="user_statistics_desc">总账户人数：</span><span style="color:blue;">{{userTableData.length}}</span>
+                <span class="user_statistics_desc">会员人数：</span><span style="color:blue;">{{memberUserLength}}</span>
+                <span class="user_statistics_desc">普通用户人数：</span><span style="color:blue;">{{ordinaryUserLength}}</span>
+                <span class="user_statistics_desc">当前违规封禁用户人数：</span><span style="color:blue;">{{violationUserLength}}</span>
+            </div>
+            <!--评论详情-->
+            <div class="user_content">
+                <el-table
+                        border
+                        height="100%"
+                        :data="userTableData"
+                        :row-class-name="userTableRowClassName"
+                        style="width: 100%"
+                        :default-sort = "{prop: 'date', order: 'descending'}">
+                    <el-table-column
+                            sortable
+                            prop="id"
+                            label="编号"
+                            width="80">
+                    </el-table-column>
+                    <el-table-column
+                            sortable
+                            :formatter="userIdentityStateFormat"
+                            prop="identity"
+                            label="身份"
+                            width="150">
+                    </el-table-column>
+                    <el-table-column
+                            sortable
+                            prop="name"
+                            label="用户名"
+                            width="200">
+                    </el-table-column>
+                    <el-table-column
+                            sortable
+                            prop="createTime"
+                            label="创建时间"
+                            width="260">
+                    </el-table-column>
+                    <el-table-column
+                            sortable
+                            prop="banTime"
+                            label="封禁截至时间"
+                            width="260">
+                    </el-table-column>
+                    <el-table-column label="操作">
+                        <template slot-scope="scope">
+                            <span v-if="scope.row.banTime == null && scope.row.type == 1">
+                                <el-date-picker
+                                        @change="selectBanTime"
+                                        v-model="timeValue"
+                                        type="datetime"
+                                        value-format="yyyy-MM-dd HH:mm:ss"
+                                        placeholder="选择日期时间">
+                                </el-date-picker>
+                                <el-button :disabled="banDisabled" size="mini" type="danger" @click="banUser(scope.row)">封禁该用户</el-button>
+                            </span>
+                            <span v-if="scope.row.banTime != null && scope.row.type == 1">
+                                <el-button :disabled="false" size="mini" type="success" @click="unsealUser(scope.row)">解除封禁</el-button>
+                            </span>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+        </el-col>
+    </el-row>
+    <!--刷新-->
+    <span
+            type="primary"
+            @click="openFullScreen">
+    </span>
+</div>
+<script>
+    var app = new Vue({
+        el:"#app",
+        data() {
+            /*数字*/
+            var checkNum = (rule, value, callback) => {
+                if (!value) {
+                    return callback(new Error('价格不能为空'));
+                }
+                setTimeout(() => {
+                    if (!Number.isInteger(value)) {
+                        callback(new Error('请输入数字'));
+                    }
+                });
+                callback();
+            };
+            return {
+                show1: false,
+                show2: false,
+                show3: false,
+                show4: false,
+                show5: true,
+                showGame1: true,
+                showGame2: false,
+                showGame3: false,
+                showGame4: false,
+                showGame5: false,
+                allGameList:[],
+                currentPage: 1, //第一页
+                pageSize: 18,  //每页18个数据
+                /*游戏详情*/
+                gameDescDrawer: false,
+                gameImgDescDrawer: false,
+                gameDescName:'',
+                gameImgDescName:'',
+                gameDescFormDisabled: true,
+                rules: {
+                    name: [
+                        { required: true, message: '请输入游戏名', trigger: 'blur' },
+                    ],
+                    price: [
+                        { required: true, message: '请输入游戏价格', trigger: 'blur' },
+                        { validator: checkNum, trigger: 'blur' },
+                    ],
+                    edition: [
+                        { required: true, message: '请输入游戏版本介绍', trigger: 'blur' },
+                    ],
+                    introduce: [
+                        { required: true, message: '请输入游戏介绍', trigger: 'blur' },
+                    ],
+                    configFirst: [
+                        { required: true, message: '请输入配置：操作系统', trigger: 'blur' },
+                    ],
+                    configSecond: [
+                        { required: true, message: '请输入配置：处理器', trigger: 'blur' },
+                    ],
+                    configThird: [
+                        { required: true, message: '请输入配置：显卡', trigger: 'blur' },
+                    ],
+                    configFourth: [
+                        { required: true, message: '请输入配置：内存', trigger: 'blur' },
+                    ],
+                    configFifth: [
+                        { required: true, message: '请输入配置：存储空间', trigger: 'blur' },
+                    ],
+                    type: [
+                        { required: true, message: '请选择游戏类型', trigger: 'blur' },
+                    ],
+                },
+                gameDescForm: {
+                    id: '',
+                    name: '',
+                    createTime: '',
+                    price: '',
+                    sales: '',
+                    likes: '',
+                    edition: '',
+                    introduce: '',
+                    configFirst: '',
+                    configSecond: '',
+                    configThird: '',
+                    configFourth: '',
+                    configFifth: '',
+                    type: '',
+                    recommend: '',
+                    exist: '',
+                },
+                gameDescImg:'',
+                gameDescImg1:'',
+                gameDescImg2:'',
+                gameDescImg3:'',
+                /*攻略*/
+                strategyTableData: [{
+                    strategyCreateTime: '',
+                    userName: '',
+                    userIdentity: '',
+                    title: '',
+                    content: '',
+                    game: '',
+                    pass: '',
+                }],
+                reviewStrategyLength: '',
+                unapprovedStrategyLength: '',
+                underReviewStrategyLength: '',
+                /*评论*/
+                commentTableData: [{
+                    commentTime: '',
+                    userIdentity: '',
+                    userId: '',
+                    userName: '',
+                    commentDesc: '',
+                    gameName: '',
+                }],
+                /*用户*/
+                userTableData: [{
+                    id: '',
+                    identity: '',
+                    name: '',
+                    createTime: '',
+                    banTime: '',
+                }],
+                timeValue: '',
+                banDisabled: true,
+                memberUserLength:'',
+                ordinaryUserLength:'',
+                violationUserLength:'',
+                /*上架游戏*/
+                addGameForm:{
+                    name: '',
+                    price: '',
+                    edition: '',
+                    introduce: '',
+                    configFirst: '',
+                    configSecond: '',
+                    configThird: '',
+                    configFourth: '',
+                    configFifth: '',
+                    type: '',
+                    recommend: '',
+                },
+                dialogVisible: false,
+                picUrl:'',
+                uploadForm: new FormData(),
+                fileList: [],
+                /*游戏统计*/
+                allGameNumLength:'',
+                bottomGameNumLength:'',
+                salesTopGameName:'',
+                likesTopGameName:'',
+            }
+        },
+        methods:{
+            /*刷新*/
+            openFullScreen() {
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(255, 255, 255, 0.7)'
+                });
+                setTimeout(() => {
+                    loading.close();
+                }, 1000);
+            },
+            /*退出*/
+            quit() {
+                this.$confirm('您确定要退出吗?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    const loading = this.$loading({
+                        lock: true,
+                        text: '正在退出，请勿操作',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.9)'
+                    });
+                    setTimeout(() => {
+                        loading.close();
+                        sessionStorage.removeItem('userId');
+                        parent.location.href = 'login.html';
+                    }, 2000);
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消操作'
+                    });
+                });
+            },
+            /*功能页面*/
+            opens(key){
+                if (key === '1-1'){
+                    this.show1 = true;
+                    this.show2 = false;
+                    this.show3 = false;
+                    this.show4 = false;
+                    this.show5 = false;
+                }else if (key === '1-2'){
+                    this.show1 = false;
+                    this.show2 = true;
+                    this.show3 = false;
+                    this.show4 = false;
+                    this.show5 = false;
+                }else if (key === '2'){
+                    this.show1 = false;
+                    this.show2 = false;
+                    this.show3 = true;
+                    this.show4 = false;
+                    this.show5 = false;
+                }else if (key === '3'){
+                    this.show1 = false;
+                    this.show2 = false;
+                    this.show3 = false;
+                    this.show4 = true;
+                    this.show5 = false;
+                }else if (key === '4'){
+                    this.show1 = false;
+                    this.show2 = false;
+                    this.show3 = false;
+                    this.show4 = false;
+                    this.show5 = true;
+                }
+            },
+            /*页数更新*/
+            handleCurrentChange(currentPage){
+                this.currentPage = currentPage;
+            },
+            /*默认游戏排序*/
+            defaultGame(){
+                axios.get("/game/name").then((res)=>{
+                    this.currentPage = 1;
+                    this.showGame1 = true;
+                    this.showGame2 = false;
+                    this.showGame3 = false;
+                    this.showGame4 = false;
+                    this.showGame5 = false;
+                    this.allGameList = res.data.data;
+                },function(err){
+                    alert('失败');
+                })
+            },
+            moneyGame(){
+                axios.get("/game/money").then((res)=>{
+                    this.currentPage = 1;
+                    this.showGame1 = false;
+                    this.showGame2 = true;
+                    this.showGame3 = false;
+                    this.showGame4 = false;
+                    this.showGame5 = false;
+                    this.allGameList = res.data.data;
+                },function(err){
+                    alert('失败');
+                })
+            },
+            likesGame(){
+                axios.get("/game/all/likes").then((res)=>{
+                    this.currentPage = 1;
+                    this.showGame1 = false;
+                    this.showGame2 = false;
+                    this.showGame3 = true;
+                    this.showGame4 = false;
+                    this.showGame5 = false;
+                    this.allGameList = res.data.data;
+                },function(err){
+                    alert('失败');
+                })
+            },
+            salesGame(){
+                axios.get("/game/sales").then((res)=>{
+                    this.currentPage = 1;
+                    this.showGame1 = false;
+                    this.showGame2 = false;
+                    this.showGame3 = false;
+                    this.showGame4 = true;
+                    this.showGame5 = false;
+                    this.allGameList = res.data.data;
+                },function(err){
+                    alert('失败');
+                })
+            },
+            newestGame(){
+                axios.get("/game/all/time").then((res)=>{
+                    this.currentPage = 1;
+                    this.showGame1 = false;
+                    this.showGame2 = false;
+                    this.showGame3 = false;
+                    this.showGame4 = false;
+                    this.showGame5 = true;
+                    this.allGameList = res.data.data;
+                },function(err){
+                    alert('失败');
+                })
+            },
+            recommendGame(){
+                axios.get("/game/recommend").then((res)=>{
+                    this.currentPage = 1;
+                    this.showGame1 = true;
+                    this.showGame2 = false;
+                    this.showGame3 = false;
+                    this.showGame4 = false;
+                    this.showGame5 = false;
+                    this.allGameList = res.data.data;
+                },function(err){
+                    alert('失败');
+                })
+            },
+            notExistGame(){
+                axios.get("/game/notExist").then((res)=>{
+                    this.currentPage = 1;
+                    this.showGame1 = true;
+                    this.showGame2 = false;
+                    this.showGame3 = false;
+                    this.showGame4 = false;
+                    this.showGame5 = false;
+                    this.allGameList = res.data.data;
+                },function(err){
+                    alert('失败');
+                })
+            },
+            /*游戏详情*/
+            descGame(id){
+                this.gameDescDrawer = true;
+                axios.get("/game/details/"+id).then((res)=>{
+                    this.gameDescName = res.data.data.name;
+                    this.gameDescForm = res.data.data;
+                },function(err){
+                    alert('错误');
+                })
+            },
+            descGameImg(id){
+                this.gameImgDescDrawer = true;
+                axios.get("/game/details/"+id).then((res)=>{
+                    this.gameImgDescName = res.data.data.name;
+                    this.gameDescImg = res.data.data.img;
+                    this.gameDescImg1 = res.data.data.screenshotFirst;
+                    this.gameDescImg2 = res.data.data.screenshotSecond;
+                    this.gameDescImg3 = res.data.data.screenshotThird;
+                },function(err){
+                    alert('错误');
+                })
+            },
+            /*开启修改*/
+            modifyGameDescForm(){
+                this.gameDescFormDisabled = false;
+            },
+            /*提交修改*/
+            submitGameDescForm(gameDescForm){
+                this.$refs[gameDescForm].validate((valid) => {
+                    if (valid) {
+                        axios.post("/game/basics",this.gameDescForm).then((res)=>{
+                            this.$message.success(res.data.msg);
+                            this.gameDescFormDisabled = true;
+                        },function(err){
+                            alert('失败');
+                        })
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
+            },
+            cancelForm() {
+                this.gameDescDrawer = false;
+                this.gameDescFormDisabled = true;
+            },
+            /*过审攻略*/
+            reviewStrategy(){
+                axios.get("/strategy/list").then((res)=>{
+                    this.reviewStrategyLength = res.data.data.length;
+                },function(err){
+                    alert('失败');
+                })
+            },
+            /*未过审攻略*/
+            unapprovedStrategy(){
+                axios.get("/strategy/unapproved").then((res)=>{
+                    this.unapprovedStrategyLength = res.data.data.length;
+                },function(err){
+                    alert('失败');
+                })
+            },
+            /*审核中的攻略*/
+            underReviewStrategy(){
+                axios.get("/strategy/underReview").then((res)=>{
+                    this.underReviewStrategyLength = res.data.data.length;
+                },function(err){
+                    alert('失败');
+                })
+            },
+            /*攻略*/
+            allStrategy(){
+                axios.get("/strategy/allStrategy").then((res)=>{
+                    this.strategyTableData = res.data.data;
+                },function(err){
+                    alert('失败');
+                })
+            },
+            /*攻略状态*/
+            passStateFormat(row) {
+                if (row.pass === 0) {
+                    return '审核中'
+                } else if(row.pass === 1){
+                    return '通过'
+                } else{
+                    return '未通过'
+                }
+            },
+            identityStateFormat(row){
+                if (row.userIdentity === 0) {
+                    return 'VIP'
+                } else if(row.userIdentity === 1){
+                    return '普通'
+                }
+            },
+            tableRowClassName({row, rowIndex}) {
+                if (row.userIdentity === 1) {
+                    return '';
+                } else if (row.userIdentity === 0) {
+                    return 'success-row';
+                }
+                return '';
+            },
+            /*查看攻略*/
+            handleSee(row) {
+                axios.get("/strategy/desc/"+row.id).then((res)=>{
+                    this.$alert(res.data.data.content, res.data.data.title, {
+                        confirmButtonText: '确定',
+                    });
+                },function(err){
+                    alert('失败');
+                })
+            },
+            /*通过审核*/
+            adoptStrategy(row){
+                axios.put("/strategy/adopt/"+row.id).then((res)=>{
+                    this.$message.success("审核通过");
+                    this.underReviewStrategy();
+                    this.unapprovedStrategy();
+                    this.reviewStrategy();
+                    this.allStrategy();
+                },function(err){
+                    alert('失败');
+                })
+            },
+            /*取消过审*/
+            noAdoptStrategy(row){
+                axios.put("/strategy/noAdopt/"+row.id).then((res)=>{
+                    this.$message.error("审核未通过");
+                    this.underReviewStrategy();
+                    this.unapprovedStrategy();
+                    this.reviewStrategy();
+                    this.allStrategy();
+                },function(err){
+                    alert('失败');
+                })
+            },
+            /*全部评论*/
+            allComment(){
+                axios.get("/comment/allComment").then((res)=>{
+                    this.commentTableData = res.data.data;
+                    console.log(res.data.data)
+                },function(err){
+                    alert('失败');
+                })
+            },
+            deleteComment(row){
+                axios.delete("/comment/delete/"+row.id).then((res)=>{
+                    this.$message.success("删除成功");
+                    this.allComment();
+                },function(err){
+                    alert('失败');
+                })
+            },
+            /*查询全部用户*/
+            allUser(){
+                axios.get("/user/allUser").then((res)=>{
+                    this.userTableData = res.data.data;
+                },function(err){
+                    alert('失败');
+                })
+            },
+            userIdentityStateFormat(row){
+                if (row.identity === 0) {
+                    return 'VIP'
+                } else if(row.identity === 1){
+                    return '普通'
+                }
+            },
+            userTableRowClassName({row, rowIndex}) {
+                if (row.identity === 1) {
+                    return '';
+                } else if (row.identity === 0) {
+                    return 'success-row';
+                }
+                return '';
+            },
+            /*会员人数*/
+            memberUser(){
+                axios.get("/user/member").then((res)=>{
+                    this.memberUserLength = res.data.data.length;
+                },function(err){
+                    alert('失败');
+                })
+            },
+            /*普通用户人数*/
+            ordinaryUser(){
+                axios.get("/user/ordinary").then((res)=>{
+                    this.ordinaryUserLength = res.data.data.length - 1;
+                },function(err){
+                    alert('失败');
+                })
+            },
+            /*封禁人数*/
+            violationUser(){
+                axios.get("/user/violation").then((res)=>{
+                    this.violationUserLength = res.data.data.length;
+                },function(err){
+                    alert('失败');
+                })
+            },
+            /*封禁用户*/
+            banUser(row){
+                axios.post("/user/addBan",{id:row.id,banTime:this.timeValue}).then((res)=>{
+                    this.$message.success("封禁成功")
+                    this.allUser();
+                    this.memberUser();
+                    this.ordinaryUser();
+                    this.violationUser();
+                },function(err){
+                    alert('失败');
+                })
+            },
+            selectBanTime(){
+                this.banDisabled = false;
+            },
+            /*解除封禁*/
+            unsealUser(row){
+                axios.delete("/user/deleteBan/"+row.id).then((res)=>{
+                    this.$message.success("解禁成功")
+                    this.allUser();
+                    this.memberUser();
+                    this.ordinaryUser();
+                    this.violationUser();
+                },function(err){
+                    alert('失败');
+                })
+            },
+            /*上架游戏*/
+            uploadFile(file) {
+                this.uploadForm.append('files', file.file);
+            },
+            submitUpload(addGameForm) {
+                if(this.addGameForm.files != null && this.addGameForm.files.length > 0){
+                    this.$refs[addGameForm].validate((valid) => {
+                        if (valid) {
+                            this.$refs.upload.submit();
+                            this.uploadForm.append('name', this.addGameForm.name);
+                            this.uploadForm.append('price', this.addGameForm.price);
+                            this.uploadForm.append('edition', this.addGameForm.edition);
+                            this.uploadForm.append('introduce', this.addGameForm.introduce);
+                            this.uploadForm.append('configFirst', this.addGameForm.configFirst);
+                            this.uploadForm.append('configSecond', this.addGameForm.configSecond);
+                            this.uploadForm.append('configThird', this.addGameForm.configThird);
+                            this.uploadForm.append('configFourth', this.addGameForm.configFourth);
+                            this.uploadForm.append('configFifth', this.addGameForm.configFifth);
+                            this.uploadForm.append('type', this.addGameForm.type);
+                            this.uploadForm.append('recommend', this.addGameForm.recommend);
+                            axios.post("/game/addGame",this.uploadForm).then(res=>{
+                                this.$message({type: 'success', message: '上架成功!'});
+                                this.reload();
+                            })
+                        }else {
+                            return false;
+                        }
+                    })
+                }else{
+                    this.$message({type: 'error', message: '请上传图片!'});
+                }
+            },
+            imgPreview (file, fileList) {
+                let fileName = file.name;
+                let regex = /(.jpg|.png)$/;
+                if (regex.test(fileName.toLowerCase())) {
+                    this.picUrl = URL.createObjectURL(file.raw);
+                    this.addGameForm.files=fileList;
+                } else {
+                    //移除最后一个元素
+                    fileList.pop();
+                    this.$message.error('请选择图片文件');
+                }
+            },
+            /*游戏总数*/
+            allGameNum(){
+                axios.get("/game/name").then((res)=>{
+                    this.allGameNumLength = res.data.data.length;
+                },function(err){
+                    alert('失败');
+                })
+            },
+            /*下架游戏*/
+            bottomGame(){
+                axios.get("/game/notExist").then((res)=>{
+                    this.bottomGameNumLength = res.data.data.length;
+                },function(err){
+                    alert('失败');
+                })
+            },
+            /*销量最多*/
+            salesTopGame(){
+                axios.get("/game/sales").then((res)=>{
+                    this.salesTopGameName = res.data.data[0].name;
+                },function(err){
+                    alert('失败');
+                })
+            },
+            /*点赞最多*/
+            likesTopGame(){
+                axios.get("/game/all/likes").then((res)=>{
+                    this.likesTopGameName = res.data.data[0].name;
+                },function(err){
+                    alert('失败');
+                })
+            },
+        },
+        /*页面加载完毕执行函数*/
+        mounted: function(){
+            this.likesTopGame();
+            this.salesTopGame();
+            this.bottomGame();
+            this.allGameNum();
+            this.violationUser();
+            this.ordinaryUser();
+            this.memberUser();
+            this.allUser();
+            this.allComment();
+            this.underReviewStrategy();
+            this.unapprovedStrategy();
+            this.reviewStrategy();
+            this.allStrategy();
+            this.defaultGame();
+            /*当前登录的用户id*/
+            console.log(sessionStorage.getItem('userId'));
+        },
+    })
+</script>
+</body>
+</html>
